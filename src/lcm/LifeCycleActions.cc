@@ -212,7 +212,7 @@ void  LifeCycleManager::stop_action(const LCMAction& la)
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-void  LifeCycleManager::migrate_action(const LCMAction& la)
+void  LifeCycleManager::migrate_action(const LCMAction& la, bool poff_migr)
 {
     int    cpu, mem, disk;
     vector<VectorAttribute *> pci;
@@ -235,6 +235,17 @@ void  LifeCycleManager::migrate_action(const LCMAction& la)
         //                SAVE_MIGRATE STATE
         //----------------------------------------------------
 
+        History::VMAction action;
+
+        if ( poff_migr )
+        {
+            action = History::MIGRATE_ACTION;
+        }
+        else
+        {
+            action = History::POFF_MIGRATE_ACTION;
+        }
+
         vm->set_state(VirtualMachine::SAVE_MIGRATE);
 
         vm->set_resched(false);
@@ -245,12 +256,11 @@ void  LifeCycleManager::migrate_action(const LCMAction& la)
 
         vm->set_stime(the_time);
 
-        vm->set_action(History::MIGRATE_ACTION, la.uid(), la.gid(), la.req_id());
+        vm->set_action(action, la.uid(), la.gid(), la.req_id());
 
         vmpool->update_history(vm);
 
-        vm->set_previous_action(History::MIGRATE_ACTION, la.uid(), la.gid(),
-                la.req_id());
+        vm->set_previous_action(action, la.uid(), la.gid(), la.req_id());
 
         vmpool->update_previous_history(vm);
 
@@ -258,7 +268,15 @@ void  LifeCycleManager::migrate_action(const LCMAction& la)
 
         //----------------------------------------------------
 
-        vmm->trigger(VMMAction::SAVE,vid);
+        if ( poff_migr )
+        {
+            vmm->trigger(VMMAction::SAVE,vid);
+        }
+        else
+        {
+            vmm->trigger(VMMAction::SHUTDOWN,vid);
+        }
+
     }
     else if (vm->get_state() == VirtualMachine::POWEROFF ||
              vm->get_state() == VirtualMachine::SUSPENDED ||

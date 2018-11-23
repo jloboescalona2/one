@@ -83,7 +83,7 @@ void  LifeCycleManager::save_success_action(int vid)
     }
     else if (vm->get_lcm_state() == VirtualMachine::SAVE_SUSPEND)
     {
-        time_t              the_time = time(0);
+        time_t the_time = time(0);
 
         //----------------------------------------------------
         //                SUSPENDED STATE
@@ -112,7 +112,7 @@ void  LifeCycleManager::save_success_action(int vid)
     }
     else if ( vm->get_lcm_state() == VirtualMachine::SAVE_STOP)
     {
-        time_t              the_time = time(0);
+        time_t the_time = time(0);
 
         //----------------------------------------------------
         //                 EPILOG_STOP STATE

@@ -88,6 +88,7 @@ public:
         CANCEL,           /**< Sent by the DM to cancel an running VM         */
         MIGRATE,          /**< Sent by the DM to migrate a VM to other host   */
         LIVE_MIGRATE,     /**< Sent by the DM to live-migrate a VM            */
+        POFF_MIGRATE,     /**< Sent by the DM to migrate a VM in a poff cycle */
         SHUTDOWN,         /**< Sent by the DM to shutdown a running VM        */
         UNDEPLOY,         /**< Sent by the DM to undeploy a running VM        */
         UNDEPLOY_HARD,    /**< Sent by the DM to force undeploy a running VM  */
@@ -376,7 +377,7 @@ private:
 
     void checkpoint_action(const LCMAction& la);
 
-    void migrate_action(const LCMAction& la);
+    void migrate_action(const LCMAction& la, bool poff_migration);
 
     void live_migrate_action(const LCMAction& la);
 
