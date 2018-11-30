@@ -469,9 +469,9 @@ module OpenNebula
         #
         # @return [nil, OpenNebula::Error] nil in case of success, Error
         #   otherwise
-        def migrate(host_id, live=false, enforce=false, ds_id=-1)
+        def migrate(host_id, live=false, enforce=false, ds_id=-1, migration_type)
             call(VM_METHODS[:migrate], @pe_id, host_id.to_i, live==true,
-                enforce, ds_id.to_i)
+                enforce, ds_id.to_i, migration_type)
         end
 
         # @deprecated use {#migrate} instead

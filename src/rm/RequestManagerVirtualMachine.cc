@@ -1084,7 +1084,7 @@ void VirtualMachineMigrate::request_execute(xmlrpc_c::paramList const& paramList
     bool live    = xmlrpc_c::value_boolean(paramList.getBoolean(3));
     bool enforce = false;
     int  ds_id   = -1;
-    bool poffmgr = false;
+    int  poffmgr = 0;
 
     if ( paramList.size() > 4 )
     {
@@ -1098,7 +1098,7 @@ void VirtualMachineMigrate::request_execute(xmlrpc_c::paramList const& paramList
 
     if ( paramList.size() > 6 )
     {
-        poffmgr = xmlrpc_c::value_boolean(paramList.getBoolean(6));
+        poffmgr = xmlrpc_c::value_int(paramList.getInt(6));
     }
 
     if (get_host_information(hid,

@@ -212,7 +212,7 @@ void  LifeCycleManager::stop_action(const LCMAction& la)
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-void  LifeCycleManager::migrate_action(const LCMAction& la, bool poff_migr)
+void  LifeCycleManager::migrate_action(const LCMAction& la)
 {
     int    cpu, mem, disk;
     vector<VectorAttribute *> pci;
@@ -237,13 +237,17 @@ void  LifeCycleManager::migrate_action(const LCMAction& la, bool poff_migr)
 
         History::VMAction action;
 
-        if ( poff_migr )
+        switch (la.action())
         {
-            action = History::MIGRATE_ACTION;
-        }
-        else
-        {
-            action = History::POFF_MIGRATE_ACTION;
+            case LCMAction::POFF_MIGRATE :
+                action = History::POFF_MIGRATE_ACTION;
+                break;
+            case LCMAction::POFF_HARD_MIGRATE :
+                action = History::POFF_HARD_MIGRATE_ACTION;
+                break;
+            default :
+                action = History::MIGRATE_ACTION;
+                break;
         }
 
         vm->set_state(VirtualMachine::SAVE_MIGRATE);
@@ -268,13 +272,17 @@ void  LifeCycleManager::migrate_action(const LCMAction& la, bool poff_migr)
 
         //----------------------------------------------------
 
-        if ( poff_migr )
+        switch (la.action())
         {
-            vmm->trigger(VMMAction::SAVE,vid);
-        }
-        else
-        {
-            vmm->trigger(VMMAction::SHUTDOWN,vid);
+            case LCMAction::POFF_MIGRATE :
+                vmm->trigger(VMMAction::SHUTDOWN,vid);
+                break;
+            case LCMAction::POFF_HARD_MIGRATE :
+                vmm->trigger(VMMAction::CANCEL,vid);
+                break;
+            default :
+                vmm->trigger(VMMAction::SAVE,vid);
+                break;
         }
 
     }

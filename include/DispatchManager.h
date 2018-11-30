@@ -166,7 +166,7 @@ public:
      *    @param ra information about the API call request
      *    @return 0 on success
      */
-    int migrate(VirtualMachine * vm, bool poff, const RequestAttributes& request);
+    int migrate(VirtualMachine * vm, int poff, const RequestAttributes& request);
 
     /**
      *  Migrates a VM. The following actions must be performed before calling

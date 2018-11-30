@@ -78,7 +78,8 @@ public:
         RETRY_ACTION           = 43,        // "one.vm.recover"
         MONITOR_ACTION         = 44,        // internal, monitoring process
         DISK_SNAPSHOT_RENAME_ACTION = 45,   // "one.vm.disksnapshotrename"
-        POFF_MIGRATE_ACTION    = 48         // "one.vm.migrate"
+        POFF_MIGRATE_ACTION    = 48,        // "one.vm.migrate"
+        POFF_HARD_MIGRATE_ACTION = 49       // "one.vm.migrate"
     };
 
     static string action_to_str(VMAction action);

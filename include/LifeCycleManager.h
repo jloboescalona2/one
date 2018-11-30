@@ -89,6 +89,7 @@ public:
         MIGRATE,          /**< Sent by the DM to migrate a VM to other host   */
         LIVE_MIGRATE,     /**< Sent by the DM to live-migrate a VM            */
         POFF_MIGRATE,     /**< Sent by the DM to migrate a VM in a poff cycle */
+        POFF_HARD_MIGRATE,/**< Sent by the DM to migrate a VM in a poff hard cycle */
         SHUTDOWN,         /**< Sent by the DM to shutdown a running VM        */
         UNDEPLOY,         /**< Sent by the DM to undeploy a running VM        */
         UNDEPLOY_HARD,    /**< Sent by the DM to force undeploy a running VM  */
@@ -309,6 +310,8 @@ private:
     // -------------------------------------------------------------------------
     // Internal Actions, triggered by OpenNebula components & drivers
     // -------------------------------------------------------------------------
+    void start_prolog_migrate(VirtualMachine* vm, int vid);
+
     void save_success_action(int vid);
     void save_failure_action(int vid);
 
@@ -377,7 +380,7 @@ private:
 
     void checkpoint_action(const LCMAction& la);
 
-    void migrate_action(const LCMAction& la, bool poff_migration);
+    void migrate_action(const LCMAction& la);
 
     void live_migrate_action(const LCMAction& la);
 
