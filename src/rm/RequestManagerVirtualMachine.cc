@@ -1161,20 +1161,20 @@ void VirtualMachineMigrate::request_execute(xmlrpc_c::paramList const& paramList
         return;
     }
 
-//    if( vm->is_previous_history_open() ||
-//       (vm->get_state() != VirtualMachine::POWEROFF &&
-//        vm->get_state() != VirtualMachine::SUSPENDED &&
-//        (vm->get_state() != VirtualMachine::ACTIVE ||
-//         (vm->get_lcm_state() != VirtualMachine::RUNNING &&
-//          vm->get_lcm_state() != VirtualMachine::UNKNOWN))))
-//    {
-//        att.resp_msg = "Migrate action is not available for state " + vm->state_str();
-//
-//        failure_response(ACTION, att);
-//
-//        vm->unlock();
-//        return;
-//    }
+    if( vm->is_previous_history_open() ||
+       (vm->get_state() != VirtualMachine::POWEROFF &&
+        vm->get_state() != VirtualMachine::SUSPENDED &&
+        (vm->get_state() != VirtualMachine::ACTIVE ||
+         (vm->get_lcm_state() != VirtualMachine::RUNNING &&
+          vm->get_lcm_state() != VirtualMachine::UNKNOWN))))
+    {
+        att.resp_msg = "Migrate action is not available for state " + vm->state_str();
+
+        failure_response(ACTION, att);
+
+        vm->unlock();
+        return;
+    }
 
     if (live)
     {
@@ -1277,13 +1277,13 @@ void VirtualMachineMigrate::request_execute(xmlrpc_c::paramList const& paramList
 
     if (ds_id != -1)
     {
-        if ( c_ds_id != ds_id && live )
-        {
-            att.resp_msg = "A migration to a different system datastore "
-                "cannot be performed live.";
-            failure_response(ACTION, att);
-            return;
-        }
+//        if ( c_ds_id != ds_id && live )
+//        {
+//            att.resp_msg = "A migration to a different system datastore "
+//                "cannot be performed live.";
+//            failure_response(ACTION, att);
+//            return;
+//        }
 
         if (get_ds_information(ds_id, ds_cluster_ids, tm_mad, att, ds_migr) != 0)
         {
