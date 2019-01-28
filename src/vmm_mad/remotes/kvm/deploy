@@ -19,16 +19,32 @@
 source $(dirname $0)/../../etc/vmm/kvm/kvmrc
 source $(dirname $0)/../../scripts_common.sh
 
-domain=$1
+DOMAIN=$1
 
-mkdir -p `dirname $domain`
-cat > $domain
+DOMAIN_LOCATION=$(dirname $DOMAIN)
+mkdir -p $DOMAIN_LOCATION
+cat > $DOMAIN
 
-data=`virsh --connect $LIBVIRT_URI create $domain`
+DATA=`virsh --connect $LIBVIRT_URI create $DOMAIN`
 
 if [ "x$?" = "x0" ]; then
-    echo $data | sed 's/Domain //' | sed 's/ created from .*$//'
+
+    DOMAIN=$(echo $DATA | sed 's/Domain //' | sed 's/ created from .*$//')
+
+    for SNAPSHOT_MD_XML in $(ls ${DOMAIN_LOCATION}/snap-*.xml 2>/dev/null); do
+
+        # query UUID only once
+        UUID=${UUID:-$(virsh --connect $LIBVIRT_URI dominfo $DOMAIN | grep UUID: | awk '{print $2}')}
+
+        # replace uuid in the snapshot metadata xml
+        sed -i "s%<uuid>[[:alnum:]-]*</uuid>%<uuid>$UUID</uuid>%" $SNAPSHOT_MD_XML
+
+        # redefine the snapshot using the xml metadata file
+        virsh --connect $LIBVIRT_URI snapshot-create $DOMAIN $SNAPSHOT_MD_XML --redefine
+    done
+    echo $DOMAIN
+
 else
-    error_message "Could not create domain from $domain"
+    error_message "Could not create domain from $DOMAIN"
     exit -1
 fi
