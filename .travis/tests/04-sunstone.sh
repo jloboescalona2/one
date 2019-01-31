@@ -22,5 +22,3 @@ timeout 60 sh -c 'until nc -z $0 $1; do sleep 1; done' localhost 9869
 
 cat /var/log/one/sunstone.log
 cat /var/log/one/sunstone.error
-
-exit 1
