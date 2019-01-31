@@ -18,10 +18,6 @@
 
 sudo ./install.sh -u travis
 
-# Set credentials
-mkdir $HOME/.one
-echo "oneadmin:opennebula" > $HOME/.one/one_auth
-
 # start oned
 
 one start
