@@ -18,13 +18,9 @@
 sunstone-server start
 
 # check it's up
-RC=`timeout 60 sh -c 'until nc -z $0 $1; do sleep 1; done' localhost 9869`
+timeout 60 sh -c 'until nc -z $0 $1; do sleep 1; done' localhost 9869
 
-echo "Sunstone log"
 cat /var/log/one/sunstone.log
-echo
-echo "Sunstone error log"
 cat /var/log/one/sunstone.error
-echo "---------"
 
-exit $RC
+exit 1
