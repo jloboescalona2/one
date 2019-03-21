@@ -15,9 +15,9 @@
 /* -------------------------------------------------------------------------- */
 
 define(function(require) {
-  var Locale = require('utils/locale');
-  var Tips = require('utils/tips');
-  var Config = require('sunstone-config');
+  var Locale = require("utils/locale");
+  var Tips = require("utils/tips");
+  var Config = require("sunstone-config");
   var confirm = Config.confirmVMActions;
   var text = "action";
   if(confirm){
@@ -62,19 +62,19 @@ define(function(require) {
     },
     "VM.migrate_poff" : {
       type: "action",
-      text: Locale.tr("Migrate") + ' <span class="label secondary radius">' + Locale.tr("Poweroff") + '</span>',
+      text: Locale.tr("Migrate") + " <span class=\"label secondary radius\">" + Locale.tr("Poweroff") + "</span>",
       layout: "vmsmigration_buttons",
       custom_classes : "state-dependent"
     },
     "VM.migrate_poff_hard" : {
       type: "action",
-      text: Locale.tr("Migrate") + ' <span class="label secondary radius">' + Locale.tr("Poweroff-hard") + '</span>',
+      text: Locale.tr("Migrate") + " <span class=\"label secondary radius\">" + Locale.tr("Poweroff-hard") + "</span>",
       layout: "vmsmigration_buttons",
       custom_classes : "state-dependent"
     },
     "VM.migrate_live" : {
       type: "action",
-      text: Locale.tr("Migrate") + ' <span class="label secondary radius">' + Locale.tr("live") + '</span>',
+      text: Locale.tr("Migrate") + " <span class=\"label secondary radius\">" + Locale.tr("live") + "</span>",
       layout: "vmsmigration_buttons",
       custom_classes : "state-dependent"
     },
@@ -98,7 +98,7 @@ define(function(require) {
     },
     "VM.resume" : {
       type: text,
-      text: '<i class="fas fa-play"/>',
+      text: "<i class=\"fas fa-play\"/>",
       layout: "vmsplay_buttons",
       custom_classes : "state-dependent"
     },
@@ -116,7 +116,7 @@ define(function(require) {
     },
     "VM.reboot_hard" : {
       type: text,
-      text: Locale.tr("Reboot") + ' <span class="label secondary radius">' + Locale.tr("hard") + '</span>',
+      text: Locale.tr("Reboot") + " <span class=\"label secondary radius\">" + Locale.tr("hard") + "</span>",
       layout: "vmsrepeat_buttons",
       custom_classes : "state-dependent"
     },
@@ -128,7 +128,7 @@ define(function(require) {
     },
     "VM.poweroff_hard" : {
       type: text,
-      text: Locale.tr("Power Off") + ' <span class="label secondary radius">' + Locale.tr("hard") + '</span>'  + "<span class='right'>&nbsp;" + Tips.html(Locale.tr("Keeps allocated Host resources. The resume operation happens quickly")) + "</span>",
+      text: Locale.tr("Power Off") + " <span class=\"label secondary radius\">" + Locale.tr("hard") + "</span>"  + "<span class='right'>&nbsp;" + Tips.html(Locale.tr("Keeps allocated Host resources. The resume operation happens quickly")) + "</span>",
       layout: "vmsstop_buttons",
       custom_classes : "state-dependent"
     },
@@ -140,7 +140,7 @@ define(function(require) {
     },
     "VM.undeploy_hard" : {
       type: text,
-      text: Locale.tr("Undeploy") + ' <span class="label secondary radius">' + Locale.tr("hard") + '</span>'  + "<span class='right'>&nbsp;" + Tips.html(Locale.tr("Frees Host resources. The resume operation may take long")) + "</span>",
+      text: Locale.tr("Undeploy") + " <span class=\"label secondary radius\">" + Locale.tr("hard") + "</span>"  + "<span class='right'>&nbsp;" + Tips.html(Locale.tr("Frees Host resources. The resume operation may take long")) + "</span>",
       layout: "vmsstop_buttons",
       custom_classes : "state-dependent"
     },
@@ -155,7 +155,7 @@ define(function(require) {
     "VM.terminate_hard" : {
       type: "confirm",
       icon: "<i class='fas fa-trash fa-3' style='color:#ec5840'/>",
-      text: Locale.tr(" Terminate") + ' <span class="label secondary radius">' + Locale.tr("hard") + '</span>',
+      text: Locale.tr(" Terminate") + " <span class=\"label secondary radius\">" + Locale.tr("hard") + "</span>",
       layout: "vmsdelete_buttons",
       tip: Locale.tr("This will remove information from non-persistent hard disks"),
       custom_classes : "state-dependent"
@@ -176,14 +176,14 @@ define(function(require) {
       type: "confirm_with_select",
       text: Locale.tr("Recover"),
       layout: "vmsplanification_buttons",
-      custom_select: '<select class="resource_list_select">\
-                    <option value="2">' + Locale.tr("retry") + '</option>\
-                    <option value="1">' + Locale.tr("success") + '</option>\
-                    <option value="0">' + Locale.tr("failure") + '</option>\
-                    <option value="3">' + Locale.tr("delete") + '</option>\
-                    <option value="4">' + Locale.tr("delete-recreate") + '</option>\
-                    <option value="5">' + Locale.tr("delete-db") + '</option>\
-                  </select>'              ,
+      custom_select: "<select class=\"resource_list_select\">\
+                    <option value=\"2\">" + Locale.tr("retry") + "</option>\
+                    <option value=\"1\">" + Locale.tr("success") + "</option>\
+                    <option value=\"0\">" + Locale.tr("failure") + "</option>\
+                    <option value=\"3\">" + Locale.tr("delete") + "</option>\
+                    <option value=\"4\">" + Locale.tr("delete-recreate") + "</option>\
+                    <option value=\"5\">" + Locale.tr("delete-db") + "</option>\
+                  </select>"              ,
       tip: Locale.tr("Recovers a stuck VM that is waiting for a driver operation. \
                     The recovery may be done by failing, succeeding or retrying the current operation. \
                     YOU NEED TO MANUALLY CHECK THE VM STATUS ON THE HOST, to decide if the operation \
@@ -196,17 +196,36 @@ define(function(require) {
     },
     "VM.startvnc" : {
       type: "action",
-      text: '<i class="fas fa-desktop"/> ' + Locale.tr("VNC"),
-      custom_classes: "only-sunstone-info vnc-sunstone-info"
+      text: "<i class=\"fas fa-desktop\"/> " + Locale.tr("VNC"),
+      custom_classes: "only-sunstone-info vnc-sunstone-info",
+      display: function(){
+        r = false;
+        if(config && config.system_config && config.system_config.vnc_proxy_type && config.system_config.vnc_proxy_type === "vnc"){
+          r = true;
+        }
+        return r;
+      }
     },
     "VM.startspice" : {
       type: "action",
-      text: '<i class="fas fa-desktop"/> ' + Locale.tr("SPICE"),
+      text: "<i class=\"fas fa-desktop\"/> " + Locale.tr("SPICE"),
       custom_classes: "only-sunstone-info spice-sunstone-info"
+    },
+    "VM.startguac" : {
+      type: "action",
+      text: "<i class=\"fas fa-desktop\"/> " + Locale.tr("GUAC"),
+      custom_classes: "only-sunstone-info vnc-sunstone-info",
+      display: function(){
+        r = false;
+        if(config && config.system_config && config.system_config.vnc_proxy_type && config.system_config.vnc_proxy_type === "guacamole"){
+          r = true;
+        }
+        return r;
+      }
     },
     "VM.save_as_template" : {
       type: "action",
-      text: '<i class="fas fa-save"/>',
+      text: "<i class=\"fas fa-save\"/>",
       custom_classes : "state-dependent"
     },
     "VM.edit_labels" : {
@@ -235,6 +254,6 @@ define(function(require) {
       text: Locale.tr("Unlock"),
       layout: "lock_buttons"
     }
-  }
+  };
   return Buttons;
-})
+});

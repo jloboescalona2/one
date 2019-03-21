@@ -15,55 +15,5 @@
 /* -------------------------------------------------------------------------- */
 
 define(function(require) {
-  /*
-    DEPENDENCIES
-   */
-
-  var OpenNebulaVM = require("opennebula/vm");
-  var StateActions = require("../utils/state-actions");
-
-  /*
-    CONSTANTS
-   */
-
-  var TAB_ID = require("../tabId");
-  var RESOURCE = "VM";
-  var XML_ROOT = "VM";
-
-  /*
-    FUNCTION DEFINITIONS
-   */
-
-  function _pre(info, contextTabId) {
-    var element = info[XML_ROOT];
-
-    // Enable only action buttons for the current state
-    StateActions.disableAllStateActions();
-    StateActions.enableStateActions(element.STATE, element.LCM_STATE);
-
-    // Enable / disable vnc button
-    if (OpenNebulaVM.isVNCSupported(element)) {
-      $(".vnc-sunstone-info").show();
-    } else {
-      $(".vnc-sunstone-info").hide();
-    }
-
-    if (OpenNebulaVM.isSPICESupported(element)) {
-      $(".spice-sunstone-info").show();
-    } else {
-      $(".spice-sunstone-info").hide();
-    }
-
-    if (config["federation_mode"] == "SLAVE") {
-      $(".vnc-sunstone-info").hide();
-    }
-  }
-
-  function _post(info, contextTabId) {
-  }
-
-  return {
-    "pre": _pre,
-    "post": _post
-  };
+  return "guacVMDialog";
 });

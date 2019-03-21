@@ -19,26 +19,26 @@ define(function(require) {
     DEPENDENCIES
    */
 
-  var TabDataTable = require('utils/tab-datatable');
-  var VMsTableUtils = require('./utils/datatable-common');
-  var OpenNebulaVM = require('opennebula/vm');
-  var SunstoneConfig = require('sunstone-config');
-  var Locale = require('utils/locale');
-  var StateActions = require('./utils/state-actions');
-  var Sunstone = require('sunstone');
-  var Vnc = require('utils/vnc');
-  var Spice = require('utils/spice');
-  var Notifier = require('utils/notifier');
-  var DashboardUtils = require('utils/dashboard');
-  var SearchDropdown = require('hbs!./datatable/search');
-
+  var TabDataTable = require("utils/tab-datatable");
+  var VMsTableUtils = require("./utils/datatable-common");
+  var OpenNebulaVM = require("opennebula/vm");
+  var SunstoneConfig = require("sunstone-config");
+  var Locale = require("utils/locale");
+  var StateActions = require("./utils/state-actions");
+  var Sunstone = require("sunstone");
+  var Vnc = require("utils/vnc");
+  var Spice = require("utils/spice");
+  var Guac = require("utils/guac");
+  var Notifier = require("utils/notifier");
+  var DashboardUtils = require("utils/dashboard");
+  var SearchDropdown = require("hbs!./datatable/search");
   /*
     CONSTANTS
    */
 
   var RESOURCE = "VM";
   var XML_ROOT = "VM";
-  var TAB_NAME = require('./tabId');
+  var TAB_NAME = require("./tabId");
   var LABELS_COLUMN = 13;
   var SEARCH_COLUMN = 14;
 
@@ -66,9 +66,9 @@ define(function(require) {
           {"bSortable": false, "aTargets": ["check", 6, 7, 11]},
           {"sWidth": "35px", "aTargets": [0]},
           {"bVisible": true, "aTargets": SunstoneConfig.tabTableColumns(TAB_NAME)},
-          {"bVisible": false, "aTargets": ['_all']}
+          {"bVisible": false, "aTargets": ["_all"]}
       ]
-    }
+    };
 
     this.columns = VMsTableUtils.columns;
 
@@ -137,7 +137,7 @@ define(function(require) {
   }
 
   function _preUpdateView() {
-    var tab = $('#' + TAB_NAME);
+    var tab = $("#" + TAB_NAME);
     if (!Sunstone.rightInfoVisible(tab)){
       StateActions.disableAllStateActions();
     }
@@ -170,33 +170,43 @@ define(function(require) {
 
     TabDataTable.prototype.initialize.call(this, opts);
 
-    $('#' + this.dataTableId).on("click", '.vnc', function() {
-      var vmId = $(this).attr('vm_id');
-
+    $("#" + this.dataTableId).on("click",function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }).on("click", ".vnc", function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var vmId = $(this).attr("vm_id");
       if (!Vnc.lockStatus()) {
         Vnc.lock();
         Sunstone.runAction("VM.startvnc_action", vmId);
       } else {
-        Notifier.notifyError(Locale.tr("VNC Connection in progress"))
+        Notifier.notifyError(Locale.tr("VNC Connection in progress"));
       }
-
-      return false;
-    });
-
-    $('#' + this.dataTableId).on("click", '.spice', function() {
-      var vmId = $(this).attr('vm_id');
-
+    }).on("click", ".spice", function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var vmId = $(this).attr("vm_id");
       if (!Spice.lockStatus()) {
         Spice.lock();
         Sunstone.runAction("VM.startspice_action", vmId);
       } else {
-        Notifier.notifyError(Locale.tr("SPICE Connection in progress"))
+        Notifier.notifyError(Locale.tr("SPICE Connection in progress"));
       }
-
-      return false;
+    }).on("click", ".guacamole", function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var vmId = $(this).attr("vm_id");
+      if (!Vnc.lockStatus()) {
+        Vnc.lock();
+        Sunstone.runAction("VM.startguac_action", vmId);
+      } else {
+        Notifier.notifyError(Locale.tr("Guacamole Connection in progress"));
+      }
     });
 
-    $('#' + this.dataTableId).on("change", 'tbody input.check_item', function() {
+    $("#" + this.dataTableId).on("change", "tbody input.check_item", function() {
       if ($(this).is(":checked")){
         StateActions.enableStateActions($(this).attr("state"), $(this).attr("lcm_state"));
       } else {
@@ -204,8 +214,8 @@ define(function(require) {
         StateActions.disableAllStateActions();
 
         // Enable actions available to any of the selected VMs
-        var nodes = $('tr', that.dataTable); //visible nodes only
-        $.each($('input.check_item:checked', nodes), function(){
+        var nodes = $("tr", that.dataTable); //visible nodes only
+        $.each($("input.check_item:checked", nodes), function(){
           StateActions.enableStateActions($(this).attr("state"), $(this).attr("lcm_state"));
         });
 

@@ -18,10 +18,10 @@ require 'CloudServer'
 
 require 'OpenNebulaJSON'
 include OpenNebulaJSON
-
 require 'OpenNebulaVNC'
 require 'OpenNebulaAddons'
 require 'OpenNebulaJSON/JSONUtils'
+
 #include JSONUtils
 
 class SunstoneServer < CloudServer
@@ -294,6 +294,104 @@ class SunstoneServer < CloudServer
 
         return vnc.proxy(resource)
     end
+	
+    ########################################################################
+    # Guacamole
+    ########################################################################
+    def startguac(id, vnc)
+        resource = retrieve_resource("vm", id)
+        if OpenNebula.is_error?(resource)
+            return [404, resource.to_json]
+        end
+        client = @client
+        vm_pool = VirtualMachinePool.new(client, -1)
+        user_pool = UserPool.new(client)
+        rc = user_pool.info
+        if OpenNebula.is_error?(rc)
+        	 puts rc.message
+        	 exit -1
+        end
+        rc = vm_pool.info
+        if OpenNebula.is_error?(rc)
+          puts rc.message
+          exit -1
+        end
+        userstr = user_pool.to_xml
+        userxml = Nokogiri::XML(userstr)
+        vmstr = vm_pool.to_xml
+        vmxml = Nokogiri::XML(vmstr)
+        @userlist = []
+        @vmlist = []
+        userxml.xpath('//USER').each do |thing|
+          passwd_exists = thing.xpath('TEMPLATE//TOKEN_PASSWORD')
+          if passwd_exists.empty?
+            thing.xpath('//TEMPLATE').each do |node|
+              passwd = Nokogiri::XML::Node.new "TOKEN_PASSWORD", node
+              passwd.content = ""
+              node.add_child(passwd)
+            end
+          end
+          @userlist.push(UserClass.new(thing.at_xpath('NAME').content, thing.at_xpath('TEMPLATE//TOKEN_PASSWORD').content, "md5", thing.at_xpath('ID').content))
+        end
+        vmxml.xpath('//VM').each do |thing|
+        graphics_on = thing.xpath('TEMPLATE//GRAPHICS//TYPE')
+          if !graphics_on.empty?
+            if thing.at_xpath('STATE').content == "3" && (thing.at_xpath('TEMPLATE//GRAPHICS//TYPE').content == "VNC" || thing.at_xpath('TEMPLATE//GRAPHICS//TYPE').content == "vnc")
+              passwd_exists = thing.xpath('TEMPLATE//GRAPHICS//PASSWD')
+              nic_ip = ""
+              if passwd_exists.empty?
+                thing.xpath('//TEMPLATE//GRAPHICS').each do |node|
+                  passwd = Nokogiri::XML::Node.new "PASSWD", node
+                  passwd.content = ""
+                  node.add_child(passwd)
+                end
+              end
+              ip_exists = thing.xpath('//TEMPLATE//NIC')
+              if !ip_exists.empty?
+                nics = Nokogiri::XML(thing.to_xml)
+                nics.xpath('//TEMPLATE//NIC').each do |nic|
+                  if nic.at_xpath('NIC_ID').content == "0"
+                    nic_ip = nic.at_xpath('IP').content
+                  end
+                end	
+              end
+              @vmlist.push(VMClass.new(thing.at_xpath('NAME').content, thing.at_xpath('UNAME').content, thing.at_xpath('STATE').content, thing.at_xpath('HISTORY_RECORDS//HISTORY//HOSTNAME').content, thing.at_xpath('TEMPLATE//GRAPHICS//PORT').content, thing.at_xpath('TEMPLATE//GRAPHICS//PASSWD').content, nic_ip))
+            end
+          end
+        end
+        userid = ""
+        builder = Nokogiri::XML::Builder.new do |xml|
+          xml.send(:'user-mapping') {
+            @userlist.each do |u|
+            xml.authorize(:username => u.username, :password => u.password) {
+              @vmlist.each do |v|
+                if u.username == v.vmowner
+                  userid = u.id
+                  xml.connection(:name => v.vmname) {
+                    xml.protocol "vnc"
+                    xml.param(:name => "hostname") { xml.text(v.vmhost) }
+                    xml.param(:name => "port") { xml.text(v.vmport) }
+                    if v.vmpass != ""
+                      xml.param(:name => "password") { xml.text(v.vmpass) }
+                    end
+                  }
+                  if v.ip != ""
+                    connname = v.vmname + "-RDP"
+                    xml.connection(:name => connname) {
+                  	xml.protocol "rdp"
+                  	xml.param(:name => "hostname") { xml.text(v.ip) }
+                  	xml.param(:name => "port") { xml.text("3389") }
+                  }
+                  end
+                end
+              end
+            }
+            end
+          }
+        end
+        resource2 = retrieve_resource("user", userid)
+        return vnc.guacproxy(resource, resource2)
+    end
 
     ########################################################################
     # Accounting & Monitoring
@@ -510,4 +608,27 @@ class SunstoneServer < CloudServer
             return resource
         end
     end
+end
+
+class UserClass
+   attr_reader :username, :password, :encoding, :id
+   def initialize(name, pass, encode, id)
+	  @username = name
+	  @password = pass
+	  @encoding = encode
+	  @id = id
+   end
+end
+
+class VMClass
+   attr_reader :vmname, :vmowner, :vmstate, :vmhost, :vmport, :vmpass, :ip
+   def initialize(name, owner, state, host, port, password, nic_ip)
+	  @vmname = name
+	  @vmowner = owner
+	  @vmstate = state
+	  @vmhost = host
+	  @vmport = port
+	  @vmpass = password
+	  @ip = nic_ip
+   end
 end

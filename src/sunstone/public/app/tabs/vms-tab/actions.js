@@ -15,23 +15,24 @@
 /* -------------------------------------------------------------------------- */
 
 define(function(require) {
-  var Config = require('sunstone-config');
-  var Sunstone = require('sunstone');
-  var Notifier = require('utils/notifier');
-  var Locale = require('utils/locale');
-  var OpenNebulaVM = require('opennebula/vm');
-  var CommonActions = require('utils/common-actions');
-  var Vnc = require('utils/vnc');
-  var Spice = require('utils/spice');
+  var Config = require("sunstone-config");
+  var Sunstone = require("sunstone");
+  var Notifier = require("utils/notifier");
+  var Locale = require("utils/locale");
+  var OpenNebulaVM = require("opennebula/vm");
+  var CommonActions = require("utils/common-actions");
+  var Vnc = require("utils/vnc");
+  var Spice = require("utils/spice");
 
-  var TAB_ID = require('./tabId');
-  var CREATE_DIALOG_ID           = require('./form-panels/create/formPanelId');
-  var DEPLOY_DIALOG_ID           = require('./dialogs/deploy/dialogId');
-  var MIGRATE_DIALOG_ID          = require('./dialogs/migrate/dialogId');
-  var VNC_DIALOG_ID              = require('./dialogs/vnc/dialogId');
-  var SPICE_DIALOG_ID            = require('./dialogs/spice/dialogId');
-  var SAVE_AS_TEMPLATE_DIALOG_ID = require('./dialogs/saveas-template/dialogId');
-  var UPDATECONF_FORM_ID         = require('./form-panels/updateconf/formPanelId');
+  var TAB_ID = require("./tabId");
+  var CREATE_DIALOG_ID           = require("./form-panels/create/formPanelId");
+  var DEPLOY_DIALOG_ID           = require("./dialogs/deploy/dialogId");
+  var MIGRATE_DIALOG_ID          = require("./dialogs/migrate/dialogId");
+  var VNC_DIALOG_ID              = require("./dialogs/vnc/dialogId");
+  var SPICE_DIALOG_ID            = require("./dialogs/spice/dialogId");
+  var GUAC_DIALOG_ID             = require("./dialogs/guac/dialogId");
+  var SAVE_AS_TEMPLATE_DIALOG_ID = require("./dialogs/saveas-template/dialogId");
+  var UPDATECONF_FORM_ID         = require("./form-panels/updateconf/formPanelId");
 
   var XML_ROOT = "VM";
   var RESOURCE = "VM";
@@ -49,7 +50,7 @@ define(function(require) {
           $(".provision_refresh_info", ".provision_list_vms").click();
         } else {
           Sunstone.getDataTable(TAB_ID).updateElement(request, response);
-          if (Sunstone.rightInfoVisible($('#' + TAB_ID))) {
+          if (Sunstone.rightInfoVisible($("#" + TAB_ID))) {
             Sunstone.insertPanels(TAB_ID, response);
           }
         }
@@ -57,52 +58,52 @@ define(function(require) {
       error: Notifier.onError
     },
     "VM.refresh": _commonActions.refresh(),
-    "VM.chown": _commonActions.multipleAction('chown'),
-    "VM.chgrp": _commonActions.multipleAction('chgrp'),
-    "VM.hold":    _commonActions.multipleAction('hold'),
-    "VM.release": _commonActions.multipleAction('release'),
-    "VM.suspend": _commonActions.multipleAction('suspend'),
-    "VM.resume": _commonActions.multipleAction('resume'),
-    "VM.stop": _commonActions.multipleAction('stop'),
-    "VM.reboot": _commonActions.multipleAction('reboot'),
-    "VM.reboot_hard": _commonActions.multipleAction('reboot_hard'),
-    "VM.poweroff": _commonActions.multipleAction('poweroff'),
-    "VM.poweroff_hard": _commonActions.multipleAction('poweroff_hard'),
-    "VM.undeploy": _commonActions.multipleAction('undeploy'),
-    "VM.undeploy_hard": _commonActions.multipleAction('undeploy_hard'),
-    "VM.terminate": _commonActions.multipleAction('terminate'),
-    "VM.terminate_hard": _commonActions.multipleAction('terminate_hard'),
-    "VM.recover": _commonActions.multipleAction('recover'),
-    "VM.resched": _commonActions.multipleAction('resched'),
-    "VM.unresched": _commonActions.multipleAction('unresched'),
-    "VM.lockM": _commonActions.multipleAction('lock', false),
-    "VM.lockU": _commonActions.multipleAction('lock', false),
-    "VM.lockA": _commonActions.multipleAction('lock', false),
-    "VM.unlock": _commonActions.multipleAction('unlock', false),
+    "VM.chown": _commonActions.multipleAction("chown"),
+    "VM.chgrp": _commonActions.multipleAction("chgrp"),
+    "VM.hold":    _commonActions.multipleAction("hold"),
+    "VM.release": _commonActions.multipleAction("release"),
+    "VM.suspend": _commonActions.multipleAction("suspend"),
+    "VM.resume": _commonActions.multipleAction("resume"),
+    "VM.stop": _commonActions.multipleAction("stop"),
+    "VM.reboot": _commonActions.multipleAction("reboot"),
+    "VM.reboot_hard": _commonActions.multipleAction("reboot_hard"),
+    "VM.poweroff": _commonActions.multipleAction("poweroff"),
+    "VM.poweroff_hard": _commonActions.multipleAction("poweroff_hard"),
+    "VM.undeploy": _commonActions.multipleAction("undeploy"),
+    "VM.undeploy_hard": _commonActions.multipleAction("undeploy_hard"),
+    "VM.terminate": _commonActions.multipleAction("terminate"),
+    "VM.terminate_hard": _commonActions.multipleAction("terminate_hard"),
+    "VM.recover": _commonActions.multipleAction("recover"),
+    "VM.resched": _commonActions.multipleAction("resched"),
+    "VM.unresched": _commonActions.multipleAction("unresched"),
+    "VM.lockM": _commonActions.multipleAction("lock", false),
+    "VM.lockU": _commonActions.multipleAction("lock", false),
+    "VM.lockA": _commonActions.multipleAction("lock", false),
+    "VM.unlock": _commonActions.multipleAction("unlock", false),
 
-    "VM.chmod": _commonActions.singleAction('chmod'),
-    "VM.rename": _commonActions.singleAction('rename'),
+    "VM.chmod": _commonActions.singleAction("chmod"),
+    "VM.rename": _commonActions.singleAction("rename"),
     "VM.update_template": _commonActions.updateTemplate(),
     "VM.append_template": _commonActions.appendTemplate(),
-    "VM.deploy_action": _commonActions.singleAction('deploy'),
-    "VM.migrate_action": _commonActions.singleAction('migrate'),
-    "VM.migrate_poff_action": _commonActions.singleAction('migrate_poff'),
-    "VM.migrate_poff_hard_action": _commonActions.singleAction('migrate_poff_hard'),
-    "VM.migrate_live_action": _commonActions.singleAction('livemigrate'),
-    "VM.attachdisk": _commonActions.singleAction('attachdisk'),
-    "VM.detachdisk": _commonActions.singleAction('detachdisk'),
-    "VM.attachnic": _commonActions.singleAction('attachnic'),
-    "VM.detachnic": _commonActions.singleAction('detachnic'),
-    "VM.resize": _commonActions.singleAction('resize'),
-    "VM.disk_resize": _commonActions.singleAction('disk_resize'),
-    "VM.snapshot_create": _commonActions.singleAction('snapshot_create'),
-    "VM.snapshot_revert": _commonActions.singleAction('snapshot_revert'),
-    "VM.snapshot_delete": _commonActions.singleAction('snapshot_delete'),
-    "VM.disk_snapshot_create": _commonActions.singleAction('disk_snapshot_create'),
-    "VM.disk_snapshot_revert": _commonActions.singleAction('disk_snapshot_revert'),
-    "VM.disk_snapshot_rename": _commonActions.singleAction('disk_snapshot_rename'),
-    "VM.disk_snapshot_delete": _commonActions.singleAction('disk_snapshot_delete'),
-    "VM.disk_saveas" : _commonActions.singleAction('disk_saveas'),
+    "VM.deploy_action": _commonActions.singleAction("deploy"),
+    "VM.migrate_action": _commonActions.singleAction("migrate"),
+    "VM.migrate_poff_action": _commonActions.singleAction("migrate_poff"),
+    "VM.migrate_poff_hard_action": _commonActions.singleAction("migrate_poff_hard"),
+    "VM.migrate_live_action": _commonActions.singleAction("livemigrate"),
+    "VM.attachdisk": _commonActions.singleAction("attachdisk"),
+    "VM.detachdisk": _commonActions.singleAction("detachdisk"),
+    "VM.attachnic": _commonActions.singleAction("attachnic"),
+    "VM.detachnic": _commonActions.singleAction("detachnic"),
+    "VM.resize": _commonActions.singleAction("resize"),
+    "VM.disk_resize": _commonActions.singleAction("disk_resize"),
+    "VM.snapshot_create": _commonActions.singleAction("snapshot_create"),
+    "VM.snapshot_revert": _commonActions.singleAction("snapshot_revert"),
+    "VM.snapshot_delete": _commonActions.singleAction("snapshot_delete"),
+    "VM.disk_snapshot_create": _commonActions.singleAction("disk_snapshot_create"),
+    "VM.disk_snapshot_revert": _commonActions.singleAction("disk_snapshot_revert"),
+    "VM.disk_snapshot_rename": _commonActions.singleAction("disk_snapshot_rename"),
+    "VM.disk_snapshot_delete": _commonActions.singleAction("disk_snapshot_delete"),
+    "VM.disk_saveas" : _commonActions.singleAction("disk_saveas"),
 
     "VM.create_dialog" : {
       type: "custom",
@@ -179,7 +180,7 @@ define(function(require) {
             Vnc.lock();
             Sunstone.runAction("VM.startvnc_action", elem);
           } else {
-            Notifier.notifyError(Locale.tr("VNC Connection in progress"))
+            Notifier.notifyError(Locale.tr("VNC Connection in progress"));
             return false;
           }
         });
@@ -207,7 +208,7 @@ define(function(require) {
             Spice.lock();
             Sunstone.runAction("VM.startspice_action", elem);
           } else {
-            Notifier.notifyError(Locale.tr("SPICE Connection in progress"))
+            Notifier.notifyError(Locale.tr("SPICE Connection in progress"));
             return false;
           }
         });
@@ -217,15 +218,55 @@ define(function(require) {
       type: "single",
       call: OpenNebulaVM.vnc,
       callback: function(request, response) {
-       var dialog = Sunstone.getDialog(SPICE_DIALOG_ID);
-       dialog.setElement(response);
-       dialog.show();
+        var dialog = Sunstone.getDialog(SPICE_DIALOG_ID);
+        dialog.setElement(response);
+        dialog.show();
       },
       error: function(req, resp) {
         Notifier.onError(req, resp);
         Spice.unlock();
       },
       notify: true
+    },
+    "VM.startguac" : {
+      type: "custom",
+      call: function() {
+        $.each(Sunstone.getDataTable(TAB_ID).elements(), function(index, elem) {
+          if (!Vnc.lockStatus()) {
+            Sunstone.runAction("VM.startguac_action", elem);
+          } else {
+            Notifier.notifyError(Locale.tr("Guacamole Connection in progress"));
+            return false;
+          }
+        });
+      }
+    },
+    "VM.startguac_action" : {
+      type: "single",
+      call: OpenNebulaVM.guac,
+      callback: function(request, response) {
+        if(config && config.system_config && config.system_config.vnc_proxy_type === "guacamole"){
+          var systemConfig = config.system_config;
+          if(response && response.guactoken && response.vm_name && response.vmbase64){
+            var hostname = systemConfig.vnc_client_host && systemConfig.vnc_client_host.length? systemConfig.vnc_client_host : window.location.hostname;
+            var defaultPort = "8080";
+            var port = systemConfig.vnc_client_port && systemConfig.vnc_client_port.length? systemConfig.vnc_client_port : (systemConfig.vnc_proxy_port && systemConfig.vnc_proxy_port.length? systemConfig.vnc_proxy_port : defaultPort);
+            var url = "http://" + hostname + ":" + port + "/guacamole/#/client/" + response.vmbase64 + "?token=" + response.guactoken;
+            var dialog = Sunstone.getDialog(GUAC_DIALOG_ID).setElement({
+              "url":url
+            });
+            Sunstone.getDialog(GUAC_DIALOG_ID).reset();
+          }
+        }else{
+          Notifier.notifyError(Locale.tr("Guacamole Connection error"));
+          Vnc.unlock();
+        }
+      },
+      error: function(req, resp) {
+        Notifier.onError(req, resp);
+        Vnc.unlock();
+      },
+      notify: false
     },
     "VM.save_as_template" : {
       type: "single",

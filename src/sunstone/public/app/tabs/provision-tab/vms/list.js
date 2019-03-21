@@ -29,6 +29,7 @@ define(function(require) {
   var StateActions = require("tabs/vms-tab/utils/state-actions");
   var Vnc = require("utils/vnc");
   var Spice = require("utils/spice");
+  var Guac = require("utils/guac");
 
   var TemplateVmsList = require("hbs!./list");
   var TemplateConfirmSaveAsTemplate = require("hbs!./confirm_save_as_template");
@@ -42,6 +43,7 @@ define(function(require) {
 
   var VNC_DIALOG_ID   = require("tabs/vms-tab/dialogs/vnc/dialogId");
   var SPICE_DIALOG_ID = require("tabs/vms-tab/dialogs/spice/dialogId");
+  var GUAC_DIALOG_ID = require("tabs/vms-tab/dialogs/guac/dialogId");
 
   return {
     "generate": generate_provision_vms_list,
@@ -742,6 +744,42 @@ define(function(require) {
         success: function(request, response){
           update_provision_vm_info(vm_id, context);
           button.removeAttr("disabled");
+        },
+        error: function(request, response){
+          Notifier.onError(request, response);
+          button.removeAttr("disabled");
+        }
+      });
+
+      return false;
+    });
+
+    context.on("click", ".provision_guac_button", function(){
+      var button = $(this);
+      button.attr("disabled", "disabled");
+      var vm_id = $(".provision_info_vm", context).attr("vm_id");
+      var vm_data = $(".provision_info_vm", context).data("vm");
+      OpenNebula.VM.guac({
+        data : {
+          id: vm_id
+        },
+        success: function(request, response){
+          if (OpenNebula.VM.isVNCSupported(vm_data)) {
+
+            var dialog = Sunstone.getDialog(GUAC_DIALOG_ID);
+            dialog.setElement(response);
+            dialog.show();
+
+            button.removeAttr("disabled");
+          } else if (OpenNebula.VM.isSPICESupported(vm_data)) {
+            var dialog = Sunstone.getDialog(SPICE_DIALOG_ID);
+            dialog.setElement(response);
+            dialog.show();
+
+            button.removeAttr("disabled");
+          } else {
+            Notifier.notifyError("The remote console is not enabled for this VM");
+          }
         },
         error: function(request, response){
           Notifier.onError(request, response);

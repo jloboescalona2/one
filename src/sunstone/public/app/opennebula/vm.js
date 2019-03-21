@@ -15,15 +15,39 @@
 /* -------------------------------------------------------------------------- */
 
 define(function(require) {
-  var OpenNebulaAction = require('./action'),
-      OpenNebulaHelper = require('./helper'),
-      OpenNebulaError  = require('./error');
-      Locale = require('utils/locale'),
-      Navigation = require('utils/navigation');
+  var OpenNebulaAction = require("./action"),
+      OpenNebulaHelper = require("./helper"),
+      OpenNebulaError  = require("./error");
+      Locale = require("utils/locale"),
+      Navigation = require("utils/navigation");
 
-  var OpenNebulaCluster = require('./cluster');
+  var formatingURL = function(url="", value = "", find = "%SERVICE%"){
+    return url.replace(find, value);
+  };
+
+  var OpenNebulaCluster = require("./cluster");
 
   var RESOURCE = "VM";
+
+  var funcAjax = function(url = "", params = {}, method=""){
+    var callback = params.success;
+    var callback_error = params.error;
+    var resource = RESOURCE;
+    var action = OpenNebulaHelper.action(method);
+    var request = OpenNebulaHelper.request(resource, method, (params.data.id  || null));
+    $.ajax({
+      url: url,
+      type: "POST",
+      dataType: "json",
+      success: function(response) {
+        return callback ? callback(request, response) : null;
+      },
+      error: function(response) {
+        return callback_error ?
+            callback_error(request, OpenNebulaError(response)) : null;
+      }
+    });
+  };
 
   var STATES_STR = [
     "INIT",
@@ -279,13 +303,13 @@ define(function(require) {
   ];
 
   var EXTERNAL_IP_ATTRS = [
-    'GUEST_IP',
-    'GUEST_IP_ADDRESSES',
-    'AWS_IP_ADDRESS',
-    'AWS_PUBLIC_IP_ADDRESS',
-    'AWS_PRIVATE_IP_ADDRESS',
-    'AZ_IPADDRESS',
-    'SL_PRIMARYIPADDRESS'
+    "GUEST_IP",
+    "GUEST_IP_ADDRESSES",
+    "AWS_IP_ADDRESS",
+    "AWS_PUBLIC_IP_ADDRESS",
+    "AWS_PRIVATE_IP_ADDRESS",
+    "AZ_IPADDRESS",
+    "SL_PRIMARYIPADDRESS"
   ];
 
   var NIC_IP_ATTRS = [
@@ -309,17 +333,17 @@ define(function(require) {
   ];
 
   var EXTERNAL_NETWORK_ATTRIBUTES = [
-    'GUEST_IP',
-    'GUEST_IP_ADDRESSES',
-    'AWS_IP_ADDRESS',
-    'AWS_DNS_NAME',
-    'AWS_PUBLIC_IP_ADDRESS',
-    'AWS_PUBLIC_DNS_NAME',
-    'AWS_PRIVATE_IP_ADDRESS',
-    'AWS_PRIVATE_DNS_NAME',
-    'AWS_SECURITY_GROUPS',
-    'AZ_IPADDRESS',
-    'SL_PRIMARYIPADDRESS'
+    "GUEST_IP",
+    "GUEST_IP_ADDRESSES",
+    "AWS_IP_ADDRESS",
+    "AWS_DNS_NAME",
+    "AWS_PUBLIC_IP_ADDRESS",
+    "AWS_PUBLIC_DNS_NAME",
+    "AWS_PRIVATE_IP_ADDRESS",
+    "AWS_PRIVATE_DNS_NAME",
+    "AWS_SECURITY_GROUPS",
+    "AZ_IPADDRESS",
+    "SL_PRIMARYIPADDRESS"
   ];
 
   var MIGRATE_ACTION_STR = [
@@ -498,26 +522,14 @@ define(function(require) {
       OpenNebulaAction.simple_action(params, RESOURCE, "disk_snapshot_delete", action_obj);
     },
     "vnc" : function(params, startstop) {
-      var callback = params.success;
-      var callback_error = params.error;
-      var id = params.data.id;
-      var resource = RESOURCE;
-
-      var method = startstop;
-      var action = OpenNebulaHelper.action(method);
-      var request = OpenNebulaHelper.request(resource, method, id);
-      $.ajax({
-        url: "vm/" + id + "/startvnc",
-        type: "POST",
-        dataType: "json",
-        success: function(response) {
-          return callback ? callback(request, response) : null;
-        },
-        error: function(response) {
-          return callback_error ?
-              callback_error(request, OpenNebulaError(response)) : null;
-        }
-      });
+      var defaultURL = "vm/%ID%/%SERVICE%";
+      var url = formatingURL(formatingURL(defaultURL, params.data.id, "%ID%"),"startvnc","%SERVICE%");
+      funcAjax(url, params, startstop);
+    },
+    "guac" : function(params, startstop) {
+      var defaultURL = "vm/%ID%/%SERVICE%";
+      var url = formatingURL(formatingURL(defaultURL, params.data.id, "%ID%"),"startguac","%SERVICE%");
+      funcAjax(url, params, startstop);
     },
     "append": function(params) {
       var action_obj = {"template_raw" : params.data.extra_param, append : true};
@@ -628,7 +640,7 @@ define(function(require) {
       var state = element.STATE;
       var hostname = "--";
       if (state == STATES.ACTIVE || state == STATES.SUSPENDED || state == STATES.POWEROFF) {
-        var history = retrieveLastHistoryRecord(element)
+        var history = retrieveLastHistoryRecord(element);
         if (history) {
           hostname = history.HOSTNAME;
         };
@@ -640,7 +652,7 @@ define(function(require) {
       var state = element.STATE;
       var hostname = "--";
       if (state == STATES.ACTIVE || state == STATES.SUSPENDED || state == STATES.POWEROFF) {
-        var history = retrieveLastHistoryRecord(element)
+        var history = retrieveLastHistoryRecord(element);
         if (history) {
           hostname = Navigation.link(history.HOSTNAME, "hosts-tab", history.HID);
         };
@@ -652,7 +664,7 @@ define(function(require) {
       var state = element.STATE;
       var cluster = "--";
       if (state == STATES.ACTIVE || state == STATES.SUSPENDED || state == STATES.POWEROFF) {
-        var history = retrieveLastHistoryRecord(element)
+        var history = retrieveLastHistoryRecord(element);
         if (history) {
           cluster = history.CID;
         };
@@ -675,7 +687,7 @@ define(function(require) {
     "getName": function(id){
       return OpenNebulaAction.getName(id, RESOURCE);
     }
-  }
+  };
 
   function retrieveLastHistoryRecord(element) {
     if (element.HISTORY_RECORDS && element.HISTORY_RECORDS.HISTORY) {
@@ -692,27 +704,27 @@ define(function(require) {
 
   // Return true if the VM has a hybrid section
   function isNICGraphsSupported(element) {
-    var history = retrieveLastHistoryRecord(element)
+    var history = retrieveLastHistoryRecord(element);
     if (history) {
-      return $.inArray(history.VM_MAD, ['az']) == -1;
+      return $.inArray(history.VM_MAD, ["az"]) == -1;
     } else {
       return false;
     }
   }
 
    function isDiskGraphsSupported(element) {
-    var history = retrieveLastHistoryRecord(element)
+    var history = retrieveLastHistoryRecord(element);
     if (history) {
-      return $.inArray(history.VM_MAD, ['ec2','az']) == -1;
+      return $.inArray(history.VM_MAD, ["ec2","az"]) == -1;
     } else {
       return false;
     }
   }
 
   function isNICAttachSupported(element) {
-    var history = retrieveLastHistoryRecord(element)
+    var history = retrieveLastHistoryRecord(element);
     if (history) {
-      return $.inArray(history.VM_MAD, ['ec2', 'az']) == -1;
+      return $.inArray(history.VM_MAD, ["ec2", "az"]) == -1;
     } else {
       return false;
     }
@@ -752,7 +764,7 @@ define(function(require) {
 
   // Return the IP or several IPs of a VM
   function ipsStr(element, divider) {
-    var divider = divider || "<br>"
+    var divider = divider || "<br>";
     var nic = element.TEMPLATE.NIC;
     var pci = element.TEMPLATE.PCI;
     var ips = [];
@@ -764,7 +776,7 @@ define(function(require) {
         externalIP = monitoring[IPAttr];
 
         if (externalIP) {
-          var splitArr = externalIP.split(',');
+          var splitArr = externalIP.split(",");
 
           $.each(splitArr, function(i,ip){
             if (ip && ($.inArray(ip, ips) == -1)) {
@@ -772,7 +784,7 @@ define(function(require) {
             }
           });
         }
-      })
+      });
     }
 
     if (nic == undefined){
@@ -809,13 +821,13 @@ define(function(require) {
     if (ips.length > 0) {
       return ips.join(divider);
     } else {
-      return '--';
+      return "--";
     }
   };
 
   // Return the Alias or several Aliases of a VM
   function aliasStr(element, divider) {
-    var divider = divider || "<br>"
+    var divider = divider || "<br>";
     var nic_alias = element.TEMPLATE.NIC_ALIAS;
     var ips = [];
 
@@ -841,7 +853,7 @@ define(function(require) {
     if (ips.length > 0) {
       return ips.join(divider);
     } else {
-      return '--';
+      return "--";
     }
   };
 
@@ -867,4 +879,4 @@ define(function(require) {
   }
 
   return VM;
-})
+});
