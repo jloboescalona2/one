@@ -306,7 +306,6 @@ define(function(require) {
       for (buttonName in buttons) {
         buttonCode = "";
         button = buttons[buttonName];
-
         //if we meet the condition we proceed. Otherwise we skip it.
         if (Config.isTabActionEnabled(tabName, buttonName, panelName) == false) {
           continue;
@@ -344,112 +343,117 @@ define(function(require) {
         var buttonContext;
         var text;
         switch (button.layout) {
-        case "create":
-          buttonContext = $("#" + customId + "create_buttons", buttonsRow);
-          icon = button.icon ? button.icon : "<i class=\"fas fa-plus\"/>";
-          text = button.text ? icon + " " + button.text : icon;
-          strClass.push("success", "button");
-          buttonCode = "<button class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</button>";
+          case "create":
+            buttonContext = $("#" + customId + "create_buttons", buttonsRow);
+            icon = button.icon ? button.icon : "<i class=\"fas fa-plus\"/>";
+            text = button.text ? icon + " " + button.text : icon;
+            strClass.push("success", "button");
+            buttonCode = "<button class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</button>";
           break;
-        case "create_flatten":
-          buttonContext = $("#" + customId + "create_buttons_flatten", buttonsRow);
-          text = button.text;
-          buttonCode = "<li><a class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\" data=\"" + data + "\">" + text + "</a></li>";
+          case "create_flatten":
+            buttonContext = $("#" + customId + "create_buttons_flatten", buttonsRow);
+            text = button.text;
+            buttonCode = "<li><a class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\" data=\"" + data + "\">" + text + "</a></li>";
           break;
-        case "refresh":
-          buttonContext = $("#" + customId + "refresh_buttons", buttonsRow);
-          icon = button.icon ? button.icon : "<i class=\"fas fa-sync-alt\"/>";
-          text = button.text ? icon + " " + button.text : icon;
-          strClass.push("refresh", "button",  "secondary");
-          buttonCode = "<button class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</button>";
+          case "refresh":
+            buttonContext = $("#" + customId + "refresh_buttons", buttonsRow);
+            icon = button.icon ? button.icon : "<i class=\"fas fa-sync-alt\"/>";
+            text = button.text ? icon + " " + button.text : icon;
+            strClass.push("refresh", "button",  "secondary");
+            buttonCode = "<button class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</button>";
           break;
-        case "top":
-          buttonContext = $("#" + customId + "refresh_buttons", buttonsRow);
-          text = "<span class=\"fa-stack\">" +
-              "<i class=\"fas fa-sync-alt fa-stack-2x\" style=\"color: #dfdfdf\"></i>" +
-              "<i class=\"fas fa-play fa-stack-1x\"></i>" +
-            "</span>";
-          strClass.push("toggle_top_button", "only-sunstone-list", "button",  "hollow");
-          buttonCode = "<a class=\"" + strClass.join(" ") + "\" style=\"padding-left:0px; margin-right: 20px\">" + text + "</a>";
+          case "top":
+            buttonContext = $("#" + customId + "refresh_buttons", buttonsRow);
+            text = "<span class=\"fa-stack\">" +
+                "<i class=\"fas fa-sync-alt fa-stack-2x\" style=\"color: #dfdfdf\"></i>" +
+                "<i class=\"fas fa-play fa-stack-1x\"></i>" +
+              "</span>";
+            strClass.push("toggle_top_button", "only-sunstone-list", "button",  "hollow");
+            buttonCode = "<a class=\"" + strClass.join(" ") + "\" style=\"padding-left:0px; margin-right: 20px\">" + text + "</a>";
           break;
-        case "main":
-          buttonContext = $("#" + customId + "main_buttons", buttonsRow);
-          text = button.text;
-          strClass.push("button");
-          buttonCode = "<button class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</button>";
+          case "main":
+            buttonContext = $("#" + customId + "main_buttons", buttonsRow);
+            text = button.text;
+            strClass.push("button");
+            buttonCode = "<button class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</button>";
           break;
-        case "vmsplay_buttons":
-          buttonContext = $("#" + customId + "vmsplay_buttons", buttonsRow);
-          text = button.text;
-          strClass.push("button");
-          buttonCode = "<button class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</button>";
+          case "vmsplay_buttons":
+            buttonContext = $("#" + customId + "vmsplay_buttons", buttonsRow);
+            text = button.text;
+            strClass.push("button");
+            buttonCode = "<button class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</button>";
           break;
-        case "lock_buttons":
-          buttonContext = $("#" + customId + "lock_buttons", buttonsRow);
-          text = button.text;
-          buttonCode = "<li><a class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\" data=\"" + data + "\">" + text + "</a></li>";
+          case "lock_buttons":
+            buttonContext = $("#" + customId + "lock_buttons", buttonsRow);
+            text = button.text;
+            buttonCode = "<li><a class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\" data=\"" + data + "\">" + text + "</a></li>";
           break;
-        case "vmspause_buttons":
-          buttonContext = $("#" + customId + "vmspause_buttons", buttonsRow);
-          text = button.text;
-          buttonCode = "<li><a class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</a></li>";
+          case "vmspause_buttons":
+            buttonContext = $("#" + customId + "vmspause_buttons", buttonsRow);
+            text = button.text;
+            buttonCode = "<li><a class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</a></li>";
           break;
-        case "vmsstop_buttons":
-          buttonContext = $("#" + customId + "vmsstop_buttons", buttonsRow);
-          text = button.text;
-          buttonCode = "<li><a class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</a></li>";
+          case "vmsstop_buttons":
+            buttonContext = $("#" + customId + "vmsstop_buttons", buttonsRow);
+            text = button.text;
+            buttonCode = "<li><a class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</a></li>";
           break;
-        case "vmsrepeat_buttons":
-          buttonContext = $("#" + customId + "vmsrepeat_buttons", buttonsRow);
-          text = button.text;
-          buttonCode = "<li><a class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</a></li>";
+          case "vmsrepeat_buttons":
+            buttonContext = $("#" + customId + "vmsrepeat_buttons", buttonsRow);
+            text = button.text;
+            buttonCode = "<li><a class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</a></li>";
           break;
-        case "vmsdelete_buttons":
-          buttonContext = $("#" + customId + "vmsdelete_buttons", buttonsRow);
-          text = button.text;
-          buttonCode = "<li><a class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</a></li>";
+          case "vmsdelete_buttons":
+            buttonContext = $("#" + customId + "vmsdelete_buttons", buttonsRow);
+            text = button.text;
+            buttonCode = "<li><a class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</a></li>";
           break;
-        case "vmsplanification_buttons":
-          buttonContext = $("#" + customId + "vmsplanification_buttons", buttonsRow);
-          text = button.text;
-          buttonCode = "<li><a class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</a></li>";
+          case "vmsplanification_buttons":
+            buttonContext = $("#" + customId + "vmsplanification_buttons", buttonsRow);
+            text = button.text;
+            buttonCode = "<li><a class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</a></li>";
           break;
-        case "vmsmigration_buttons":
-          buttonContext = $("#" + customId + "vmsmigration_buttons", buttonsRow);
-          text = button.text;
-          buttonCode = "<li><a class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</a></li>";
+          case "vmsmigration_buttons":
+            buttonContext = $("#" + customId + "vmsmigration_buttons", buttonsRow);
+            text = button.text;
+            buttonCode = "<li><a class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</a></li>";
           break;
-        case "more_select":
-          buttonContext = $("#" + customId + "more_buttons", buttonsRow);
-          text = button.text;
-          buttonCode = "<li><a class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</a></li>";
+          case "more_select":
+            buttonContext = $("#" + customId + "more_buttons", buttonsRow);
+            text = button.text;
+            buttonCode = "<li><a class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</a></li>";
           break;
-        case "user_select":
-          buttonContext = $("#" + customId + "user_buttons", buttonsRow);
-          text = button.text;
-          buttonCode = "<li><a class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</a></li>";
+          case "user_select":
+            buttonContext = $("#" + customId + "user_buttons", buttonsRow);
+            text = button.text;
+            buttonCode = "<li><a class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</a></li>";
           break;
-        case "del":
-          buttonContext = $("#" + customId + "delete_buttons", buttonsRow);
-          text = "<i class=\" fas fa-trash-alt\"/> ";
-          strClass.push("alert", "button");
-          buttonCode = "<button class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</button>";
+          case "del":
+            buttonContext = $("#" + customId + "delete_buttons", buttonsRow);
+            text = "<i class=\" fas fa-trash-alt\"/> ";
+            strClass.push("alert", "button");
+            buttonCode = "<button class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</button>";
           break;
-        case "labels":
-          buttonContext = $("#" + customId + "labels_buttons", buttonsRow);
-          text = "<i class=\"fas fa-tags\"/>";
-          strClass.push("only-sunstone-info", "only-sunstone-list", "top_button", "secondary", "button", "dropdown");
-          buttonCode = "<button type=\"button\" data-toggle=\"" + customId + "LabelsDropdown\" class=\"" + strClass.join(" ") + "\">" +
-            text+"</button>";
+          case "labels":
+            buttonContext = $("#" + customId + "labels_buttons", buttonsRow);
+            text = "<i class=\"fas fa-tags\"/>";
+            strClass.push("only-sunstone-info", "only-sunstone-list", "top_button", "secondary", "button", "dropdown");
+            buttonCode = "<button type=\"button\" data-toggle=\"" + customId + "LabelsDropdown\" class=\"" + strClass.join(" ") + "\">" +
+              text+"</button>";
           break;
-        default:
-          buttonContext = $("#" + customId + "main_buttons", buttonsRow);
-          text = button.text;
-          strClass.push("button");
-          buttonCode = "<button class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</button>";
+          default:
+            buttonContext = $("#" + customId + "main_buttons", buttonsRow);
+            text = button.text;
+            strClass.push("button");
+            buttonCode = "<button class=\"" + strClass.join(" ") + "\" href=\"" + buttonName + "\">" + text + "</button>";
+          }
+        if(button.display && typeof button.display === "function"){
+          if(button.display()){
+            buttonContext.append(buttonCode);
+          }
+        }else{
+          buttonContext.append(buttonCode);
         }
-
-        buttonContext.append(buttonCode);
       }//for each button in tab
       //$('.top_button',actionBlock).button();
       //$('.top_button',actionBlock).addClass("secondary small button")
@@ -1241,7 +1245,6 @@ define(function(require) {
       dialogInstance.insert();
       SunstoneCfg["dialogInstances"][dialogId] = dialogInstance;
     }
-
     return dialogInstance;
   };
 

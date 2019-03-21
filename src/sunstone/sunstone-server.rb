@@ -308,6 +308,9 @@ helpers do
                 session[:page_length] = DEFAULT_PAGE_LENGTH
             end
 
+            vnc_proxy_type = $conf[:vnc_proxy_type]
+            session[:vnc_proxy_type] = (vnc_proxy_type == "vnc" || vnc_proxy_type == ""? "vnc" : vnc_proxy_type)
+
             wss = $conf[:vnc_proxy_support_wss]
             #limit to yes,no options
             session[:vnc_wss] = (wss == true || wss == "yes" || wss == "only" ?
@@ -365,7 +368,7 @@ before do
     @request_body = request.body.read
     request.body.rewind
 
-    unless %w(/ /login /vnc /spice /version).include?(request.path)
+    unless %w(/ /login /vnc /spice /guac /version).include?(request.path)
         halt [401, "csrftoken"] unless authorized? && valid_csrftoken?
     end
 
@@ -529,6 +532,15 @@ get '/vnc' do
         erb :login
     else
         erb :vnc
+    end
+end
+
+get '/guac' do
+    content_type 'text/html', :charset => 'utf-8'
+    if !authorized?
+        erb :login
+    else
+        erb :guac
     end
 end
 
@@ -884,6 +896,14 @@ end
 post '/vm/:id/startvnc' do
     vm_id = params[:id]
     @SunstoneServer.startvnc(vm_id, $vnc)
+end
+
+##############################################################################
+# Start Guacamole Session for a target VM
+##############################################################################
+post '/vm/:id/startguac' do
+    vm_id = params[:id]
+    @SunstoneServer.startguac(vm_id, $vnc)
 end
 
 ##############################################################################

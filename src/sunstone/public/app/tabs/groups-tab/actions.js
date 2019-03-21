@@ -44,7 +44,6 @@ define(function(require) {
     "Group.append_template" : _commonActions.appendTemplate(),
     "Group.update_dialog" : _commonActions.checkAndShowUpdate(),
     "Group.show_to_update" : _commonActions.showUpdate(CREATE_DIALOG_ID),
-
     "Group.fetch_quotas" : {
       type: "single",
       call: OpenNebulaResource.show,

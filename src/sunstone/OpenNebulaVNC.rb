@@ -21,7 +21,9 @@
 require 'rubygems'
 require 'json'
 require 'opennebula'
-
+require 'net/http'
+require 'uri'
+require 'base64'
 
 if !ONE_LOCATION
     NOVNC_LOCK_FILE = "/var/lock/one/.novnc.lock"
@@ -111,6 +113,8 @@ class OpenNebulaVNC
         @token_folder = File.join(VAR_LOCATION, opts[:token_folder_name])
         @proxy_path   = File.join(SHARE_LOCATION, "websockify/run")
         @proxy_port   = config[:vnc_proxy_port]
+        @client_port  = config[:vnc_client_port]
+        @client_host  = config[:vnc_client_host]
 
         @proxy_ipv6   = config[:vnc_proxy_ipv6]
 
@@ -239,6 +243,81 @@ class OpenNebulaVNC
         }
 
         return [200, info.to_json]
+    end
+
+    def guacproxy(vm_resource, user_resource)
+      # Check configurations and VM attributes
+      if !VNC_STATES.include?(vm_resource['LCM_STATE'])
+          return error(400,"Wrong state (#{vm_resource['LCM_STATE']}) to open a VNC session")
+      end
+      if vm_resource['TEMPLATE/GRAPHICS/TYPE'].nil? ||
+         !(["vnc", "spice"].include?(vm_resource['TEMPLATE/GRAPHICS/TYPE'].downcase))
+          return error(400,"VM has no VNC configured")
+      end
+      host = @client_host && @client_host.size > 0 ? @client_host : "localhost"
+      clientPort = @client_port && @client_port.size > 0 ? @client_port : @proxy_port
+      port = clientPort.size > 0 ? clientPort : "8080"
+
+      tokenuri = "http://#{host}:#{port}/guacamole-1.0.0/api/tokens"
+      sessionuri = "http://#{host}:#{port}/guacamole-1.0.0/api/session/data/default/connections"
+      response = ""
+      apitoken = ""
+      usertokenfile = "/etc/guacamole/" + user_resource['NAME']
+      vmname = vm_resource['NAME']
+      if File.file?(usertokenfile)
+        apitoken = File.read(usertokenfile)
+        uri = URI.parse(tokenuri)
+        request = Net::HTTP::Post.new(uri)
+        request.set_form_data(
+          "token" => apitoken
+        )
+        req_options = {
+          use_ssl: uri.scheme == "https",
+        }
+        response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+          http.request(request)
+        end
+        if response.kind_of? Net::HTTPSuccess
+          fullsessionuri = sessionuri + "/" + vmname + "?token=" + apitoken
+          fullsessionuri = URI.encode(fullsessionuri)
+          uri = URI.parse(fullsessionuri)
+          request = Net::HTTP::Get.new(uri)
+          req_options = {
+            use_ssl: uri.scheme == "https",
+          }
+          response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+            http.request(request)
+          end
+        end
+      end
+      if !response.kind_of? Net::HTTPSuccess
+        uri = URI.parse(tokenuri)
+        request = Net::HTTP::Post.new(uri)
+        request.set_form_data(
+          "password" => user_resource['TEMPLATE/TOKEN_PASSWORD'],
+          "username" => user_resource['NAME'],
+        )
+        req_options = {
+          use_ssl: uri.scheme == "https",
+        }
+        response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+          http.request(request)
+        end
+        tokenresponse = JSON.parse(response.body)
+        apitoken = tokenresponse['authToken']
+        output = File.open( usertokenfile, "w" )
+        output << apitoken
+        output.close
+      end
+      vmstring = "#{vmname}\x00c\x00default"
+      vmbase64 = Base64.encode64(vmstring);
+
+      info   = {
+          :vm_name => vm_resource['NAME'],
+          :guactoken => apitoken,
+          :vmbase64 => vmbase64
+        }
+      return [200, info.to_json]
     end
 
     # Delete proxy token file

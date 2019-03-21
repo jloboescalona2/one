@@ -20,15 +20,15 @@ define(function(require) {
    */
 
   var BaseDialog = require("utils/dialogs/dialog");
-  var TemplateHTML = require("hbs!./vnc/html");
+  var TemplateHTML = require("hbs!./guac/html");
   var Sunstone = require("sunstone");
-  var Vnc = require("utils/vnc");
+  var Guac = require("utils/guac");
 
   /*
     CONSTANTS
    */
 
-  var DIALOG_ID = require("./vnc/dialogId");
+  var DIALOG_ID = require("./guac/dialogId");
   var TAB_ID = require("../tabId");
 
   /*
@@ -56,34 +56,41 @@ define(function(require) {
 
   function _html() {
     return TemplateHTML({
-      "dialogId": this.dialogId
+      "dialogId": this.dialogId,
+      "url": this.element && this.element.url || ""
     });
   }
 
   function _setup(context) {
-    var that = this;
-
-    $("#open_in_a_new_window", context).on("click", function() {
-       var dialog = Sunstone.getDialog(DIALOG_ID);
-       dialog.hide();
+    $("#guacamole_buttons", context).on("click", "#open_in_a_new_window", function(e) {
+      e.preventDefault();
+      var fullUrl = $("#iframe-"+DIALOG_ID, context).attr("src");
+      if(fullUrl){
+        var win = window.open(fullUrl, "_blank");
+        win.focus();
+      }
+    }).on("click","#closeGuacamole",function(e){
+      e.preventDefault();
+      _onClose(context);
+      context.remove();
     });
-
-    $("#sendCtrlAltDelButton", context).click(function() {
-      Vnc.sendCtrlAltDel();
-      return false;
-    });
-
-    return false;
+    _onShow(context);
   }
 
   function _onShow(context) {
-    Vnc.vncCallback(this.element);
+    $("#guac_status",context).show();
+    var iframe = $("#iframe-"+DIALOG_ID, context);
+    if(iframe){
+      iframe.load(function(){
+        $("#guac_status",context).hide();
+      });
+    }
     return false;
   }
 
   function _onClose(context) {
-    Vnc.disconnect();
-    Vnc.unlock();
+    Guac.disconnect();
+    Guac.unlock();
     return false;
   }
 
