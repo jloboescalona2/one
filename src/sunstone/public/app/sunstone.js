@@ -532,6 +532,7 @@ define(function(require) {
       });
 
       $(".submit_button", actionBlock).on("click", function() {
+        console.log("TEST!",tabName);
         _submitFormPanel(tabName);
         return false;
       });
@@ -1050,6 +1051,7 @@ define(function(require) {
 
     setTimeout(function() {
       var formPanelInstance = SunstoneCfg["tabs"][tabId].activeFormPanel;
+      console.log("TEST!! ",formPanelInstance.formPanelId);
       if ($(".wizardForms", context).is(":visible")) {
         $("#" + formPanelInstance.formPanelId + "Wizard").submit();
       } else if ($(".advancedForms", context).is(":visible")) {

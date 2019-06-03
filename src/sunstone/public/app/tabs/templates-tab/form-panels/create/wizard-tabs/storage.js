@@ -20,41 +20,41 @@ define(function(require) {
    */
 
 //  require('foundation.tab');
-  var Config = require('sunstone-config');
-  var Locale = require('utils/locale');
-  var Tips = require('utils/tips');
-  var WizardFields = require('utils/wizard-fields');
-  var DiskTab = require('./storage/disk-tab');
-  var UniqueId = require('utils/unique-id');
-  var OpenNebula = require('opennebula');
+  var Config = require("sunstone-config");
+  var Locale = require("utils/locale");
+  var Tips = require("utils/tips");
+  var WizardFields = require("utils/wizard-fields");
+  var DiskTab = require("./storage/disk-tab");
+  var UniqueId = require("utils/unique-id");
+  var OpenNebula = require("opennebula");
 
   /*
     TEMPLATES
    */
 
-  var TemplateHTML = require('hbs!./storage/html');
+  var TemplateHTML = require("hbs!./storage/html");
 
   /*
     CONSTANTS
    */
 
-  var WIZARD_TAB_ID = require('./storage/wizardTabId');
-  var LINKS_CONTAINER_ID = 'template_create_storage_tabs';
-  var CONTENTS_CONTAINER_ID = 'template_create_storage_tabs_content';
+  var WIZARD_TAB_ID = require("./storage/wizardTabId");
+  var LINKS_CONTAINER_ID = "template_create_storage_tabs";
+  var CONTENTS_CONTAINER_ID = "template_create_storage_tabs_content";
 
   /*
     CONSTRUCTOR
    */
 
   function WizardTab(opts) {
-    if (!Config.isTemplateCreationTabEnabled(opts.tabId, 'storage')) {
+    if (!Config.isTemplateCreationTabEnabled(opts.tabId, "storage")) {
       throw "Wizard Tab not enabled";
     }
 
     this.wizardTabId = WIZARD_TAB_ID + UniqueId.id();
-    this.icon = 'fa-server';
+    this.icon = "fa-server";
     this.title = Locale.tr("Storage");
-    this.classes = "hypervisor"
+    this.classes = "hypervisor";
 
     if(opts.listener != undefined){
       this.listener = opts.listener;
@@ -78,27 +78,27 @@ define(function(require) {
 
   function _html() {
     return TemplateHTML({
-      'linksContainerId': LINKS_CONTAINER_ID,
-      'contentsContainerId': CONTENTS_CONTAINER_ID
+      "linksContainerId": LINKS_CONTAINER_ID,
+      "contentsContainerId": CONTENTS_CONTAINER_ID
     });
   }
 
   function _onShow(context, panelForm) {
     $.each(this.diskTabObjects, function(id, tab) {
       tab.onShow();
-    })
+    });
   }
 
   function _setup(context) {
     Tips.setup(context);
     var that = this;
     this.ds_tm_mads = [];
-    var groupDropdownOptions = '<option value="">'+Locale.tr("Default")+'</option>';
+    var groupDropdownOptions = "<option value=\"\">"+Locale.tr("Default")+"</option>";
 
     that.numberOfDisks = 0;
     that.diskTabObjects = {};
 
-    Foundation.reflow(context, 'tabs');
+    Foundation.reflow(context, "tabs");
 
     context.on("click", "#tf_btn_disks", function() {
       that.addDiskTab(context);
@@ -118,19 +118,19 @@ define(function(require) {
       success: function(request, ds_list){
         $.each(ds_list, function(ds_id, ds){
           if (ds["DATASTORE"]["TEMPLATE"]["TYPE"] === "IMAGE_DS") {
-            tm_mad_system = ds["DATASTORE"]["TEMPLATE"]["TM_MAD_SYSTEM"]
+            tm_mad_system = ds["DATASTORE"]["TEMPLATE"]["TM_MAD_SYSTEM"];
             if (tm_mad_system){
               tm_mad_system.split(",").map(function(item) {
                 var i = item.trim();
                 if(that.ds_tm_mads.indexOf(i) === -1){
                   that.ds_tm_mads.push(i);
-                  groupDropdownOptions += '<option elem_id="'+i+'" value="'+i+'">'+i+'</option>';
+                  groupDropdownOptions += "<option elem_id=\""+i+"\" value=\""+i+"\">"+i+"</option>";
                 }
               });
             }
           }
         });
-        $('select#TM_MAD_SYSTEM', context).html(groupDropdownOptions);
+        $("select#TM_MAD_SYSTEM", context).html(groupDropdownOptions);
       }
     });
   }
@@ -156,7 +156,7 @@ define(function(require) {
 
   function _fill(context, templateJSON) {
     var that = this;
-    var disks = templateJSON.DISK
+    var disks = templateJSON.DISK;
 
     if (disks instanceof Array) {
       $.each(disks, function(diskId, diskJSON) {
@@ -165,23 +165,23 @@ define(function(require) {
         }
 
         var diskTab = that.diskTabObjects[that.numberOfDisks];
-        var diskContext = $('#' + diskTab.diskTabId, context);
+        var diskContext = $("#" + diskTab.diskTabId, context);
         diskTab.fill(diskContext, diskJSON);
       });
     } else if (disks instanceof Object) {
       var diskTab = that.diskTabObjects[that.numberOfDisks];
-      var diskContext = $('#' + diskTab.diskTabId, context);
+      var diskContext = $("#" + diskTab.diskTabId, context);
       diskTab.fill(diskContext, disks);
     }
 
     if ( templateJSON.TM_MAD_SYSTEM ){
-      $('select#TM_MAD_SYSTEM', context).val(templateJSON.TM_MAD_SYSTEM);
-      if ( !$('select#TM_MAD_SYSTEM', context).val() ) {
-        $('select#TM_MAD_SYSTEM', context).val("");
+      $("select#TM_MAD_SYSTEM", context).val(templateJSON.TM_MAD_SYSTEM);
+      if ( !$("select#TM_MAD_SYSTEM", context).val() ) {
+        $("select#TM_MAD_SYSTEM", context).val("");
       }
       delete templateJSON.TM_MAD_SYSTEM;
     } else {
-      $('select#TM_MAD_SYSTEM', context).val("");
+      $("select#TM_MAD_SYSTEM", context).val("");
     }
 
     if (templateJSON.DISK) {
@@ -194,9 +194,9 @@ define(function(require) {
     that.numberOfDisks++;
     var diskTab = new DiskTab(that.numberOfDisks);
 
-    var content = $('<div id="' + diskTab.diskTabId + '" class="disk wizard_internal_tab tabs-panel">' +
+    var content = $("<div id=\"" + diskTab.diskTabId + "\" class=\"disk wizard_internal_tab tabs-panel\">" +
         diskTab.html() +
-      '</div>').appendTo($("#" + CONTENTS_CONTAINER_ID, context));
+      "</div>").appendTo($("#" + CONTENTS_CONTAINER_ID, context));
 
     var a = $("<li class='tabs-title'>" +
        "<a href='#" + diskTab.diskTabId + "'>" + Locale.tr("DISK") + "</a>" +
@@ -215,8 +215,8 @@ define(function(require) {
     // close icon: removing the tab on click
     a.on("click", "i.remove-tab", function() {
       var target = $(this).parent().attr("href");
-      var li = $(this).closest('li');
-      var ul = $(this).closest('ul');
+      var li = $(this).closest("li");
+      var ul = $(this).closest("ul");
       var content = $(target);
 
       li.remove();
@@ -225,8 +225,8 @@ define(function(require) {
       var diskId = content.attr("diskId");
       delete that.diskTabObjects[diskId];
 
-      if (li.hasClass('is-active')) {
-        $('a', ul.children('li').last()).click();
+      if (li.hasClass("is-active")) {
+        $("a", ul.children("li").last()).click();
       }
 
       that.renameTabLinks(context);
@@ -235,8 +235,8 @@ define(function(require) {
 
   function _renameTabLinks(context) {
     $("#" + LINKS_CONTAINER_ID + " li", context).each(function(index) {
-      $("a", this).html(Locale.tr("DISK") + ' ' + index + " <i class='fas fa-times-circle remove-tab'></i>");
-    })
+      $("a", this).html(Locale.tr("DISK") + " " + index + " <i class='fas fa-times-circle remove-tab'></i>");
+    });
 
     if(this.listener != undefined){
       this.listener.notify();

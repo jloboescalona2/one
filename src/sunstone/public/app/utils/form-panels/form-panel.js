@@ -16,7 +16,7 @@
 
 define(function(require) {
   // Dependencies
-//  require('foundation.abide');
+  // require('foundation.abide');
   var Notifier = require("utils/notifier");
   var Locale = require("utils/locale");
   var Sunstone = require("sunstone");
@@ -43,6 +43,7 @@ define(function(require) {
 
   function _insert(context) {
     var that = this;
+    console.log("asd", that, context);
     this.wizardElement = $(that.htmlWizard()).appendTo( $(".wizardForms", context) );
     if (that.htmlAdvanced) {
       this.advancedElement = $(that.htmlAdvanced()).appendTo( $(".advancedForms", context) );
@@ -66,7 +67,7 @@ define(function(require) {
 
   function _reInit(context) {
     var that = this;
-
+    console.log("dasd", that);
     $("#" + that.formPanelId + "Wizard, #" + that.formPanelId + "Advanced", context)
       .off("forminvalid.zf.abide").off("formvalid.zf.abide").off("submit");
 
@@ -79,19 +80,23 @@ define(function(require) {
       })
       .on("submit", function(ev) {
         ev.preventDefault();
-      });
+      }
+    );
 
     $("#" + that.formPanelId + "Wizard", context)
       .on("formvalid.zf.abide", function(ev, frm) {
+        console.log("paso! ", frm);
         that.submitWizard(frm);
         return false;
-      });
+      }
+    );
 
     $("#" + that.formPanelId + "Advanced", context)
       .on("formvalid.zf.abide", function(ev, frm) {
         that.submitAdvanced(frm);
         return false;
-      });
+      }
+    );
   }
 
   function _reset(context) {

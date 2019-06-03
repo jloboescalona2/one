@@ -201,11 +201,12 @@ define(function(require) {
 
   function _submitWizard(context) {
     var templateJSON = this.retrieve(context);
-
     if (this.action == "create") {
       Sunstone.runAction(this.resource+".create", {"vmtemplate": templateJSON});
       return false;
     } else if (this.action == "update") {
+      //JORGE el cambio se debe de hacer aca!
+      console.log("-> ", templateJSON, context, this);
       Sunstone.runAction(this.resource+".update", this.resourceId, TemplateUtils.templateToString(templateJSON));
       return false;
     }

@@ -15,46 +15,46 @@
 /* -------------------------------------------------------------------------- */
 
 define(function(require) {
-  var Locale = require('utils/locale');
-  var Buttons = require('./templates-tab/buttons');
-  var Actions = require('./templates-tab/actions');
-  var Table = require('./templates-tab/datatable');
+  var Locale = require("utils/locale");
+  var Buttons = require("./templates-tab/buttons");
+  var Actions = require("./templates-tab/actions");
+  var Table = require("./templates-tab/datatable");
 
-  var TAB_ID = require('./templates-tab/tabId');
+  var TAB_ID = require("./templates-tab/tabId");
   var DATATABLE_ID = "dataTableTemplates";
 
   var _dialogs = [
-    require('./templates-tab/dialogs/clone')
+    require("./templates-tab/dialogs/clone")
   ];
 
   var _panels = [
-    require('./templates-tab/panels/info'),
-    require('./templates-tab/panels/template')
+    require("./templates-tab/panels/info"),
+    require("./templates-tab/panels/template")
   ];
 
   var _panelsHooks = [
-    require('../utils/hooks/header')
+    require("../utils/hooks/header")
   ];
 
   var _formPanels = [
-    require('./templates-tab/form-panels/create'),
-    require('./templates-tab/form-panels/import'),
-    require('./templates-tab/form-panels/instantiate')
+    require("./templates-tab/form-panels/create"),
+    require("./templates-tab/form-panels/import"),
+    require("./templates-tab/form-panels/instantiate")
   ];
 
   var Tab = {
     tabId: TAB_ID,
     title: Locale.tr("VMs"),
-    icon: 'fa-file',
+    icon: "fa-file",
     tabClass: "subTab",
     parentTab: "templates-top-tab",
     listHeader: Locale.tr("VM Templates"),
     infoHeader: Locale.tr("VM Template"),
     lockable: true,
-    subheader: '<span>\
-        <span class="total_templates"/> <small>'+Locale.tr("TOTAL")+'</small>\
-      </span>',
-    resource: 'Template',
+    subheader: "<span>\
+        <span class=\"total_templates\"/> <small>"+Locale.tr("TOTAL")+"</small>\
+      </span>",
+    resource: "Template",
     buttons: Buttons,
     actions: Actions,
     dataTable: new Table(DATATABLE_ID, {actions: true, info: true}),
