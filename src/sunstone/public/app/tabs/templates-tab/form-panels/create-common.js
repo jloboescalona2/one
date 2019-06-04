@@ -25,6 +25,8 @@ define(function(require) {
   var Tips = require("utils/tips");
   var TemplateUtils = require("utils/template-utils");
   var WizardFields = require("utils/wizard-fields");
+  var OpenNebulaTemplate = require("opennebula/template");
+  var OpenNebulaAction = require("opennebula/action");
 
   /*
     TEMPLATES
@@ -205,9 +207,52 @@ define(function(require) {
       Sunstone.runAction(this.resource+".create", {"vmtemplate": templateJSON});
       return false;
     } else if (this.action == "update") {
-      //JORGE el cambio se debe de hacer aca!
-      console.log("-> ", templateJSON, context, this);
-      Sunstone.runAction(this.resource+".update", this.resourceId, TemplateUtils.templateToString(templateJSON));
+      var actionUpdate = this.resource + ".update";
+      var resourceId = this.resourceId;
+      if(
+        window &&
+        window.lastInfoVmTemplate &&
+        window.lastInfoVmTemplate.data &&
+        templateJSON &&
+        templateJSON.DISK &&
+        templateJSON.HYPERVISOR &&
+        templateJSON.HYPERVISOR === "vcenter"
+      ){
+        params = {
+          data: window.lastInfoVmTemplate.data,
+          success: function(request, response){
+            if(response){
+              var template = response.VMTEMPLATE && response.VMTEMPLATE.TEMPLATE;
+              if(template && template.DISK){
+                var lastDisk = template.DISK;
+                var newDisk = templateJSON.DISK[0];
+                if(lastDisk && lastDisk.LAST_IMAGE_DISK){
+                  //tienes que buscar el ID del VM template
+                  if(lastDisk.LAST_IMAGE_DISK === newDisk.IMAGE || lastDisk.LAST_IMAGE_DISK === newDisk.IMAGE_ID){
+                    newDisk.OPENNEBULA_MANAGED = "no";
+                    delete newDisk.LAST_IMAGE_DISK;
+                  }else{
+                    if(lastDisk.OPENNEBULA_MANAGED && lastDisk.OPENNEBULA_MANAGED === "no" ){
+                      newDisk.LAST_IMAGE_DISK = (lastDisk && lastDisk.IMAGE_ID) || (lastDisk && lastDisk.IMAGE);
+                      delete newDisk.OPENNEBULA_MANAGED;
+                    }
+                  }
+                }else{
+                  if(lastDisk.OPENNEBULA_MANAGED && lastDisk.OPENNEBULA_MANAGED === "no" ){
+                    newDisk.LAST_IMAGE_DISK = (lastDisk && lastDisk.IMAGE_ID) || (lastDisk && lastDisk.IMAGE);
+                    delete newDisk.OPENNEBULA_MANAGED;
+                  }
+                }
+                templateJSON.DISK = [newDisk];
+                Sunstone.runAction(actionUpdate, resourceId, TemplateUtils.templateToString(templateJSON));
+              }
+            }
+          }
+        };
+        OpenNebulaAction.show(params,OpenNebulaTemplate.resource);
+      }else{
+        Sunstone.runAction(actionUpdate, resourceId, TemplateUtils.templateToString(templateJSON));
+      }
       return false;
     }
   }
