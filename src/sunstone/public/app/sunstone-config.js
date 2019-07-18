@@ -18,6 +18,7 @@ define(function(require) {
   require("jquery");
   // Clone the local config object in a private var
   var _config = $.extend(true, {}, config);
+  var showIfUndefined = "";
   var Config = {
     "isTabEnabled": function(tabName) {
       var enabled = _config["view"]["enabled_tabs"].indexOf(tabName) != -1;
@@ -50,6 +51,9 @@ define(function(require) {
     "isTabPanelEnabled": function(tabName, panelTabName) {
       if (_config["view"]["tabs"][tabName]) {
         var enabled = _config["view"]["tabs"][tabName]["panel_tabs"][panelTabName];
+        if(enabled === undefined && showIfUndefined.includes(panelTabName)){
+          return true;
+        }
         return enabled;
       } else {
         return false;
