@@ -18,7 +18,7 @@ define(function(require) {
   require("jquery");
   // Clone the local config object in a private var
   var _config = $.extend(true, {}, config);
-  var showIfUndefined = "";
+  var showIfUndefined = [];
   var Config = {
     "isTabEnabled": function(tabName) {
       var enabled = _config["view"]["enabled_tabs"].indexOf(tabName) != -1;
