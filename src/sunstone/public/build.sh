@@ -31,7 +31,7 @@ install_patch() {
 
     bower install --force --allow-root --config.interactive=false
 
-    (cd bower_components/no-vnc/ && npm install && ./utils/use_require.js --clean --as amd && sed -i -e "s/'\.\//'\.\.\/bower_components\/no-vnc\/lib\//g" lib/rfb.js )
+    (cd node_modules/jloboescalona-novnc-with-fps/ && npm install && ./utils/use_require.js --clean --as amd && sed -i -e "s/'\.\//'\.\.\/node_modules\/jloboescalona-novnc-with-fps\/lib\//g" lib/rfb.js )
 
     PATCH_DIR="./patches/"
 

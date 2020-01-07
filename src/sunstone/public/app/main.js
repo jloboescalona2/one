@@ -72,7 +72,7 @@ require.config({
     "flot.tooltip": "../bower_components/flot.tooltip/js/jquery.flot.tooltip",
 
     /* VNC */
-    "vnc-rfb": "../bower_components/no-vnc/lib/rfb",
+    "vnc-rfb": "../node_modules/jloboescalona-novnc-with-fps/lib/rfb",
 
     /* Spice */
     "spice-main": "../bower_components/spice-html5/main",
