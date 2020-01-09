@@ -207,6 +207,9 @@ class SunstoneServer < CloudServer
     def perform_action(kind, id, action_json)
 
         resource = retrieve_resource(kind, id)
+        if $conf && $conf[:remove_tags_html]
+            action_json = action_json.gsub(/<[^0-9\s=>]+>/,'')
+        end
         if OpenNebula.is_error?(resource)
             return [404, resource.to_json]
         end
