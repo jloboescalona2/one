@@ -28,7 +28,6 @@ define(function(require) {
   var OpenNebulaHost = require("opennebula/host");
   var CPUBars = require("../utils/cpu-bars");
   var MemoryBars = require("../utils/memory-bars");
-  var Reserved = require("../utils/reserved");
   var DatastoresCapacityTable = require("../utils/datastores-capacity-table");
   var CanImportWilds = require("../utils/can-import-wilds");
   var Sunstone = require("sunstone");
@@ -103,7 +102,7 @@ define(function(require) {
       Sunstone.runAction("Cluster.list");
       cache = OpenNebulaAction.cache("CLUSTER");
     }
-    var elementAux = Reserved.updateHostTemplate(cache, this.element);
+    var elementAux = this.element
 
     var templateTableHTML = TemplateTable.html(
                                       this.strippedTemplate,

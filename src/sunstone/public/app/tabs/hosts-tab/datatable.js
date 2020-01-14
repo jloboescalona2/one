@@ -25,7 +25,6 @@ define(function(require) {
   var Humanize = require("utils/humanize");
   var CPUBars = require("./utils/cpu-bars");
   var MemoryBars = require("./utils/memory-bars");
-  var Reserved = require("./utils/reserved");
   var OpenNebulaHost = require("opennebula/host");
   var LabelsUtils = require("utils/labels/utils");
   var SearchDropdown = require("hbs!./datatable/search");
@@ -133,9 +132,8 @@ define(function(require) {
       cache = OpenNebulaAction.cache("CLUSTER");
     }
     var element = element_json.HOST;
-    var elementAux = Reserved.updateHostTemplate(cache, element);
-    var cpuBars = CPUBars.html(elementAux);
-    var memoryBars = MemoryBars.html(elementAux);
+    var cpuBars = CPUBars.html(element);
+    var memoryBars = MemoryBars.html(element);
 
     this.totalHosts++;
 
