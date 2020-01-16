@@ -9,7 +9,7 @@
     <link rel="icon" href="images/favicon.png">
     <% if $conf[:env] == 'dev' %>
       <link href="css/app.css?v=<%= OpenNebula::VERSION %>" media="screen, projector, print" rel="stylesheet" type="text/css"></link>
-      <script src="bower_components/requirejs/require.js" data-main="app/login"></script>
+      <script src="node_modules/requirejs/require.js" data-main="app/login"></script>
     <% else %>
       <link href="css/app.min.css?v=<%= OpenNebula::VERSION %>" media="screen, projector, print" rel="stylesheet" type="text/css"></link>
       <script src="dist/login.js"></script>

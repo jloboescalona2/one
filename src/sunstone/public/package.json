@@ -1,12 +1,43 @@
 {
   "name": "opennebula-sunstone",
   "version": "0.0.1",
-  "devDependencies": {
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.12.0",
+    "almond": "0.3.1",
+    "datatables": "1.10.12",
+    "flot": "git://github.com/flot/flot.git#95b6b63",
+    "flot.tooltip": "git://github.com/krzysu/flot.tooltip.git#a4ae1ae",
+    "foundation-sites": "6.2.1",
     "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0",
     "grunt-contrib-requirejs": "^1.0.0",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-sass": "^1.2.1",
-    "node-sass": "^3.10.1"
-  }
+    "node-sass": "^3.10.1",
+    "jgrowl": "1.4.2",
+    "jquery": "2.2.3",
+    "jquery-ui": "^1.12.1",
+    "navigo": "2.1.1",
+    "no-vnc": "git://github.com/novnc/noVNC.git#9fe2fd04d4",
+    "require-handlebars-plugin": "0.11.2",
+    "requirejs": "2.1.22",
+    "resumablejs": "git://github.com/23/resumable.js.git#420cd351c5",
+    "spice-html5": "git://github.com/freedesktop/spice-html5.git#spice-html5-0.1.6",
+    "sprintf": "git://github.com/alexei/sprintf.js.git#747b806",
+    "vis": "git://github.com/almende/vis.git#8d575d977f594590c1df2699a03523eb574c2423",
+    "wickedpicker": "git://github.com/ericjgagnon/wickedpicker.git#dd2cce3"
+  },
+  "description": "OpenNebula Sunstone",
+  "moduleType": [
+    "amd"
+  ],
+  "license": "Apache",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "test",
+    "tests"
+  ],
+  "main": ""
 }

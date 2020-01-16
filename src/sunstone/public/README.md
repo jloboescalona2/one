@@ -5,7 +5,7 @@ Sunstone dependencies
 2. Install the following npm packages:
 
   ```
-  sudo npm install -g bower
+  sudo np, install -g yarn
   sudo npm install -g grunt
   sudo npm install -g grunt-cli
   ```
@@ -13,8 +13,7 @@ Sunstone dependencies
 3. Move to the Sunstone public folder and run:
 
   ```
-  npm install
-  bower install
+  yarn
   ```
 
 Building minified JS and CSS files

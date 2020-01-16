@@ -15,7 +15,7 @@
 /* -------------------------------------------------------------------------- */
 
 define(function(require) {
-  require('../bower_components/jquery/dist/jquery.min');
+  require('../node_modules/jquery/dist/jquery.min');
   var OpenNebulaAuth = require('opennebula/auth');
   var showErrorAuth = false;
   var textOpenNebulaNotRunning = "OpenNebula is not running or there was a server exception. Please check the server logs.";

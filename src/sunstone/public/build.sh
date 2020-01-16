@@ -7,18 +7,18 @@ usage() {
  echo
  echo "Usage: build.sh [-d] [-c] [-l] [-h]"
  echo
- echo "-d: install build dependencies (bower, grunt)"
+ echo "-d: install build dependencies (grunt)"
  echo "-c: clean build"
  echo "-l: preserve main.js"
  echo "-h: prints this help"
 }
 
 clean() {
-    rm -rf dist node_modules bower_components
+    rm -rf dist node_modules
 }
 
 dependencies() {
-    npm install bower
+    npm install yarn
     npm install grunt
     npm install grunt-cli
 
@@ -27,11 +27,9 @@ dependencies() {
 
 install_patch() {
 
-    npm install
+    yarn
 
-    bower install --force --allow-root --config.interactive=false
-
-    (cd bower_components/no-vnc/ && npm install && ./utils/use_require.js --clean --as amd && sed -i -e "s/'\.\//'\.\.\/bower_components\/no-vnc\/lib\//g" lib/rfb.js )
+    (cd node_modules/no-vnc/ && npm install && ./utils/use_require.js --clean --as amd && sed -i -e "s/'\.\//'\.\.\/node_modules\/no-vnc\/lib\//g" lib/rfb.js )
 
     PATCH_DIR="./patches/"
 

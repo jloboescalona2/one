@@ -11,6 +11,7 @@ src/im_mad/collectd/collectd
 src/scheduler/src/sched/.xmlrpc_test/
 src/scheduler/src/sched/mm_sched
 src/sunstone/locale/languages/*.js
+src/sunstone/public/node_modules
 src/mad/utils/tty_expect
 src/nebula/.xmlrpc_test/
 src/nebula/oned
@@ -37,7 +38,6 @@ src/docker_machine/src/docker_machine/vendor/
 
 src/sunstone/public/.sass-cache
 src/sunstone/public/node_modules
-src/sunstone/public/bower_components
 src/sunstone/public/css/app.css
 src/sunstone/public/css/app.min.css
 src/sunstone/public/dist/

@@ -382,9 +382,9 @@ SUNSTONE_MINIFIED_DIRS="$SUNSTONE_LOCATION/public \
                $SUNSTONE_LOCATION/public/dist/console \
                $SUNSTONE_LOCATION/public/css \
                $SUNSTONE_LOCATION/public/css/opensans \
-               $SUNSTONE_LOCATION/public/bower_components/fontawesome \
-               $SUNSTONE_LOCATION/public/bower_components/fontawesome/web-fonts-with-css \
-               $SUNSTONE_LOCATION/public/bower_components/fontawesome/web-fonts-with-css/webfonts \
+               $SUNSTONE_LOCATION/public/node_modules/@fortawesome/fontawesome-free \
+               $SUNSTONE_LOCATION/public/node_modules/@fortawesome/fontawesome-free/css \
+               $SUNSTONE_LOCATION/public/node_modules/@fortawesome/fontawesome-free/webfonts \
                $SUNSTONE_LOCATION/public/locale/languages \
                $SUNSTONE_LOCATION/public/images \
                $SUNSTONE_LOCATION/public/images/logos"
@@ -592,7 +592,7 @@ INSTALL_SUNSTONE_FILES=(
 INSTALL_SUNSTONE_PUBLIC_MINIFIED_FILES=(
   SUNSTONE_PUBLIC_JS_FILES:$SUNSTONE_LOCATION/public/dist
   SUNSTONE_PUBLIC_JS_CONSOLE_FILES:$SUNSTONE_LOCATION/public/dist/console
-  SUNSTONE_PUBLIC_FONT_AWSOME:$SUNSTONE_LOCATION/public/bower_components/fontawesome/web-fonts-with-css/webfonts
+  SUNSTONE_PUBLIC_FONT_AWSOME:$SUNSTONE_LOCATION/public/node_modules/node_modules/@fortawesome/fontawesome-free/webfonts
   SUNSTONE_PUBLIC_CSS_FILES:$SUNSTONE_LOCATION/public/css
   SUNSTONE_PUBLIC_IMAGES_FILES:$SUNSTONE_LOCATION/public/images
   SUNSTONE_PUBLIC_LOGOS_FILES:$SUNSTONE_LOCATION/public/images/logos
@@ -2099,21 +2099,21 @@ SUNSTONE_PUBLIC_CSS_FILES="src/sunstone/public/css/app.min.css \
                 src/sunstone/public/css/novnc-custom.css \
                 src/sunstone/public/css/spice-custom.css"
 
-SUNSTONE_PUBLIC_FONT_AWSOME="src/sunstone/public/bower_components/fontawesome/web-fonts-with-css/webfonts/fa-brands-400.eot \
-                src/sunstone/public/bower_components/fontawesome/web-fonts-with-css/webfonts/fa-brands-400.svg \
-                src/sunstone/public/bower_components/fontawesome/web-fonts-with-css/webfonts/fa-brands-400.ttf \
-                src/sunstone/public/bower_components/fontawesome/web-fonts-with-css/webfonts/fa-brands-400.woff \
-                src/sunstone/public/bower_components/fontawesome/web-fonts-with-css/webfonts/fa-brands-400.woff2 \
-                src/sunstone/public/bower_components/fontawesome/web-fonts-with-css/webfonts/fa-regular-400.eot \
-                src/sunstone/public/bower_components/fontawesome/web-fonts-with-css/webfonts/fa-regular-400.svg \
-                src/sunstone/public/bower_components/fontawesome/web-fonts-with-css/webfonts/fa-regular-400.ttf \
-                src/sunstone/public/bower_components/fontawesome/web-fonts-with-css/webfonts/fa-regular-400.woff \
-                src/sunstone/public/bower_components/fontawesome/web-fonts-with-css/webfonts/fa-regular-400.woff2 \
-                src/sunstone/public/bower_components/fontawesome/web-fonts-with-css/webfonts/fa-solid-900.eot \
-                src/sunstone/public/bower_components/fontawesome/web-fonts-with-css/webfonts/fa-solid-900.svg \
-                src/sunstone/public/bower_components/fontawesome/web-fonts-with-css/webfonts/fa-solid-900.ttf \
-                src/sunstone/public/bower_components/fontawesome/web-fonts-with-css/webfonts/fa-solid-900.woff \
-                src/sunstone/public/bower_components/fontawesome/web-fonts-with-css/webfonts/fa-solid-900.woff2"
+SUNSTONE_PUBLIC_FONT_AWSOME="src/sunstone/public/node_modules/node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.eot \
+                src/sunstone/public/node_modules/node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.svg \
+                src/sunstone/public/node_modules/node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf \
+                src/sunstone/public/node_modules/node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.woff \
+                src/sunstone/public/node_modules/node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.woff2 \
+                src/sunstone/public/node_modules/node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.eot \
+                src/sunstone/public/node_modules/node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.svg \
+                src/sunstone/public/node_modules/node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.ttf \
+                src/sunstone/public/node_modules/node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.woff \
+                src/sunstone/public/node_modules/node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.woff2 \
+                src/sunstone/public/node_modules/node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.eot \
+                src/sunstone/public/node_modules/node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.svg \
+                src/sunstone/public/node_modules/node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf \
+                src/sunstone/public/node_modules/node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff \
+                src/sunstone/public/node_modules/node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2"
 
 SUNSTONE_PUBLIC_IMAGES_FILES="src/sunstone/public/images/ajax-loader.gif \
                         src/sunstone/public/images/favicon.ico \

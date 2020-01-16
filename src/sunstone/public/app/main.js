@@ -20,98 +20,98 @@ require.config({
     "sunstone-config": "sunstone-config",
 
     /* Almond */
-    "almond": "../bower_components/almond/almond",
+    "almond": "../node_modules/almond/almond",
 
     /* jQuery */
-    "jquery": "../bower_components/jquery/dist/jquery",
-    "jquery-ui": "../bower_components/jquery-ui/jquery-ui",
+    "jquery": "../node_modules/jquery/dist/jquery",
+    "jquery-ui": "../node_modules/jquery-ui/jquery-ui",
 
     /** Wickedpicker */
-    "wickedpicker": "../bower_components/wickedpicker/dist/wickedpicker.min",
+    "wickedpicker": "../node_modules/wickedpicker/dist/wickedpicker.min",
 
     /* DataTables */
-    "datatables.net": "../bower_components/datatables/media/js/jquery.dataTables",
-    "datatables.foundation": "../bower_components/datatables/media/js/dataTables.foundation",
+    "datatables.net": "../node_modules/datatables/media/js/jquery.dataTables",
+    "datatables.foundation": "../node_modules/datatables/media/js/jquery.dataTables",
 
     /* DataTables */
-    "jgrowl": "../bower_components/jgrowl/jquery.jgrowl",
+    "jgrowl": "../node_modules/jgrowl/jquery.jgrowl",
 
     /* Foundation */
-    "foundation": "../bower_components/foundation-sites/dist/foundation",
-    //'foundation.core': '../bower_components/foundation/js/foundation/foundation',
-    //'foundation.abide': '../bower_components/foundation/js/foundation/foundation.abide',
-    //'foundation.accordion': '../bower_components/foundation/js/foundation/foundation.accordion',
-    //'foundation.alert': '../bower_components/foundation/js/foundation/foundation.alert',
-    //'foundation.clearing': '../bower_components/foundation/js/foundation/foundation.clearing',
-    //'foundation.dropdown': '../bower_components/foundation/js/foundation/foundation.dropdown',
-    //'foundation.equalizer': '../bower_components/foundation/js/foundation/foundation.equalizer',
-    //'foundation.interchange': '../bower_components/foundation/js/foundation/foundation.interchange',
-    //'foundation.joyride': '../bower_components/foundation/js/foundation/foundation.joyride',
-    //'foundation.magellan': '../bower_components/foundation/js/foundation/foundation.magellan',
-    //'foundation.offcanvas': '../bower_components/foundation/js/foundation/foundation.offcanvas',
-    //'foundation.orbit': '../bower_components/foundation/js/foundation/foundation.orbit',
-    //'foundation.reveal': '../bower_components/foundation/js/foundation/foundation.reveal',
-    //'foundation.slider': '../bower_components/foundation/js/foundation/foundation.slider',
-    //'foundation.tab': '../bower_components/foundation/js/foundation/foundation.tab',
-    //'foundation.tooltip': '../bower_components/foundation/js/foundation/foundation.tooltip',
-    //'foundation.topbar': '../bower_components/foundation/js/foundation/foundation.topbar',
+    "foundation": "../node_modules/foundation-sites/dist/foundation",
+    //'foundation.core': '../node_modules/foundation/js/foundation/foundation',
+    //'foundation.abide': '../node_modules/foundation/js/foundation/foundation.abide',
+    //'foundation.accordion': '../node_modules/foundation/js/foundation/foundation.accordion',
+    //'foundation.alert': '../node_modules/foundation/js/foundation/foundation.alert',
+    //'foundation.clearing': '../node_modules/foundation/js/foundation/foundation.clearing',
+    //'foundation.dropdown': '../node_modules/foundation/js/foundation/foundation.dropdown',
+    //'foundation.equalizer': '../node_modules/foundation/js/foundation/foundation.equalizer',
+    //'foundation.interchange': '../node_modules/foundation/js/foundation/foundation.interchange',
+    //'foundation.joyride': '../node_modules/foundation/js/foundation/foundation.joyride',
+    //'foundation.magellan': '../node_modules/foundation/js/foundation/foundation.magellan',
+    //'foundation.offcanvas': '../node_modules/foundation/js/foundation/foundation.offcanvas',
+    //'foundation.orbit': '../node_modules/foundation/js/foundation/foundation.orbit',
+    //'foundation.reveal': '../node_modules/foundation/js/foundation/foundation.reveal',
+    //'foundation.slider': '../node_modules/foundation/js/foundation/foundation.slider',
+    //'foundation.tab': '../node_modules/foundation/js/foundation/foundation.tab',
+    //'foundation.tooltip': '../node_modules/foundation/js/foundation/foundation.tooltip',
+    //'foundation.topbar': '../node_modules/foundation/js/foundation/foundation.topbar',
 
     /* Handlebars */
-    "hbs": "../bower_components/require-handlebars-plugin/hbs",
+    "hbs": "../node_modules/require-handlebars-plugin/hbs",
 
     /* Resumable */
-    "resumable": "../bower_components/resumablejs/resumable",
+    "resumable": "../node_modules/resumablejs/resumable",
 
     /* Flot Graphs */
-    "flot": "../bower_components/flot/jquery.flot",
-    "flot.stack": "../bower_components/flot/jquery.flot.stack",
-    "flot.navigate": "../bower_components/flot/jquery.flot.navigate",
-    "flot.canvas": "../bower_components/flot/jquery.flot.canvas",
-    "flot.resize": "../bower_components/flot/jquery.flot.resize",
-    "flot.time": "../bower_components/flot/jquery.flot.time",
-    "flot.tooltip": "../bower_components/flot.tooltip/js/jquery.flot.tooltip",
+    "flot": "../node_modules/flot/src/jquery.flot",
+    "flot.stack": "../node_modules/flot/src/plugins/jquery.flot.stack",
+    "flot.navigate": "../node_modules/flot/src/plugins/jquery.flot.navigate",
+    "flot.canvas": "../node_modules/flot/src/plugins/jquery.flot.canvas",
+    "flot.resize": "../node_modules/flot/src/plugins/jquery.flot.resize",
+    "flot.time": "../node_modules/flot/src/plugins/jquery.flot.time",
+    "flot.tooltip": "../node_modules/flot.tooltip/js/jquery.flot.tooltip",
 
     /* VNC */
-    "vnc-rfb": "../bower_components/no-vnc/lib/rfb",
+    "vnc-rfb": "../node_modules/no-vnc/lib/rfb",
 
     /* Spice */
-    "spice-main": "../bower_components/spice-html5/main",
-    "spice-spicearraybuffer": "../bower_components/spice-html5/spicearraybuffer",
-    "spice-enums": "../bower_components/spice-html5/enums",
-    "spice-atKeynames": "../bower_components/spice-html5/atKeynames",
-    "spice-utils": "../bower_components/spice-html5/utils",
-    "spice-png": "../bower_components/spice-html5/png",
-    "spice-lz": "../bower_components/spice-html5/lz",
-    "spice-quic": "../bower_components/spice-html5/quic",
-    "spice-bitmap": "../bower_components/spice-html5/bitmap",
-    "spice-spicedataview": "../bower_components/spice-html5/spicedataview",
-    "spice-spicetype": "../bower_components/spice-html5/spicetype",
-    "spice-spicemsg": "../bower_components/spice-html5/spicemsg",
-    "spice-wire": "../bower_components/spice-html5/wire",
-    "spice-spiceconn": "../bower_components/spice-html5/spiceconn",
-    "spice-display": "../bower_components/spice-html5/display",
-    "spice-inputs": "../bower_components/spice-html5/inputs",
-    "spice-webm": "../bower_components/spice-html5/webm",
-    "spice-playback": "../bower_components/spice-html5/playback",
-    "spice-simulatecursor": "../bower_components/spice-html5/simulatecursor",
-    "spice-cursor": "../bower_components/spice-html5/cursor",
-    "spice-jsbn": "../bower_components/spice-html5/thirdparty/jsbn",
-    "spice-rsa": "../bower_components/spice-html5/thirdparty/rsa",
-    "spice-prng4": "../bower_components/spice-html5/thirdparty/prng4",
-    "spice-rng": "../bower_components/spice-html5/thirdparty/rng",
-    "spice-sha1": "../bower_components/spice-html5/thirdparty/sha1",
-    "spice-ticket": "../bower_components/spice-html5/ticket",
-    "spice-resize": "../bower_components/spice-html5/resize",
-    "spice-filexfer": "../bower_components/spice-html5/filexfer",
+    "spice-main": "../node_modules/spice-html5/main",
+    "spice-spicearraybuffer": "../node_modules/spice-html5/spicearraybuffer",
+    "spice-enums": "../node_modules/spice-html5/enums",
+    "spice-atKeynames": "../node_modules/spice-html5/atKeynames",
+    "spice-utils": "../node_modules/spice-html5/utils",
+    "spice-png": "../node_modules/spice-html5/png",
+    "spice-lz": "../node_modules/spice-html5/lz",
+    "spice-quic": "../node_modules/spice-html5/quic",
+    "spice-bitmap": "../node_modules/spice-html5/bitmap",
+    "spice-spicedataview": "../node_modules/spice-html5/spicedataview",
+    "spice-spicetype": "../node_modules/spice-html5/spicetype",
+    "spice-spicemsg": "../node_modules/spice-html5/spicemsg",
+    "spice-wire": "../node_modules/spice-html5/wire",
+    "spice-spiceconn": "../node_modules/spice-html5/spiceconn",
+    "spice-display": "../node_modules/spice-html5/display",
+    "spice-inputs": "../node_modules/spice-html5/inputs",
+    "spice-webm": "../node_modules/spice-html5/webm",
+    "spice-playback": "../node_modules/spice-html5/playback",
+    "spice-simulatecursor": "../node_modules/spice-html5/simulatecursor",
+    "spice-cursor": "../node_modules/spice-html5/cursor",
+    "spice-jsbn": "../node_modules/spice-html5/thirdparty/jsbn",
+    "spice-rsa": "../node_modules/spice-html5/thirdparty/rsa",
+    "spice-prng4": "../node_modules/spice-html5/thirdparty/prng4",
+    "spice-rng": "../node_modules/spice-html5/thirdparty/rng",
+    "spice-sha1": "../node_modules/spice-html5/thirdparty/sha1",
+    "spice-ticket": "../node_modules/spice-html5/ticket",
+    "spice-resize": "../node_modules/spice-html5/resize",
+    "spice-filexfer": "../node_modules/spice-html5/filexfer",
 
     /* vis.js */
-    "vis": "../bower_components/vis/dist/vis.min",
+    "vis": "../node_modules/vis/dist/vis.min",
 
     /* navigo */
-    "Navigo": "../bower_components/navigo/lib/navigo.min",
+    "Navigo": "../node_modules/navigo/lib/navigo.min",
 
     /* sprintf */
-    "sprintf": "../bower_components/sprintf/dist/sprintf.min"
+    "sprintf": "../node_modules/sprintf/dist/sprintf.min"
   },
   shim: {
     /* Tabs */
